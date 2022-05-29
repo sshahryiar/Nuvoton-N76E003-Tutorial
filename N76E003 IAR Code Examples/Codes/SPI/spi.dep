@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+    <fileVersion>2</fileVersion>
+    <fileChecksum>128875243</fileChecksum>
+    <configuration>
+        <name>Debug</name>
+        <outputs>
+            <file>$PROJ_DIR$\..\..\My_Libraries\MAX6675\MAX6675.c</file>
+            <file>$PROJ_DIR$\Debug\List\Common.i</file>
+            <file>$PROJ_DIR$\Debug\List\soft_delay.i</file>
+            <file>$PROJ_DIR$\Debug\List\MAX6675.i</file>
+            <file>$PROJ_DIR$\Debug\Obj\soft_delay.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\Common.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\main.pbi</file>
+            <file>$PROJ_DIR$\..\..\My_Libraries\MAX7219\MAX72xx.h</file>
+            <file>$PROJ_DIR$\..\..\My_Libraries\Software Delay\soft_delay.c</file>
+            <file>$PROJ_DIR$\Debug\Obj\main.r51</file>
+            <file>$PROJ_DIR$\Debug\Obj\Delay.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\MAX6675.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\MAX72xx.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\main.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\MAX72xx.pbi</file>
+            <file>$PROJ_DIR$\Debug\List\main.i</file>
+            <file>$PROJ_DIR$\Debug\Obj\spi.pbd</file>
+            <file>$PROJ_DIR$\Debug\Exe\spi.d51</file>
+            <file>$PROJ_DIR$\Debug\Obj\MAX72xx.r51</file>
+            <file>$PROJ_DIR$\main.c</file>
+            <file>$PROJ_DIR$\Debug\Obj\MAX6675.r51</file>
+            <file>$PROJ_DIR$\..\..\My_Libraries\MAX6675\MAX6675.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\MAX6675.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\soft_delay.pbi</file>
+            <file>$PROJ_DIR$\..\..\My_Libraries\MAX7219\MAX72xx.c</file>
+            <file>$PROJ_DIR$\..\..\Common\Delay.c</file>
+            <file>$PROJ_DIR$\..\..\Common\Common.c</file>
+            <file>$PROJ_DIR$\..\..\Include\Common.h</file>
+            <file>$PROJ_DIR$\..\..\Include\SFR_Macro.h</file>
+            <file>$PROJ_DIR$\..\..\Include\N76E003_iar.h</file>
+            <file>$PROJ_DIR$\..\..\My_Libraries\Software Delay\soft_delay.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\Common.r51</file>
+            <file>$PROJ_DIR$\Debug\Obj\Delay.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\soft_delay.r51</file>
+            <file>$PROJ_DIR$\..\..\Include\Delay.h</file>
+            <file>$TOOLKIT_DIR$\inc\clib\stdio.h</file>
+            <file>$TOOLKIT_DIR$\inc\clib\stdarg.h</file>
+            <file>$PROJ_DIR$\..\..\Include\Function_define.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\Common.pbi</file>
+            <file>$PROJ_DIR$\Debug\Exe\spi.bin</file>
+            <file>$PROJ_DIR$\Debug\Obj\Delay.r51</file>
+            <file>$TOOLKIT_DIR$\inc\clib\sysmac.h</file>
+            <file>$PROJ_DIR$\Debug\List\Delay.i</file>
+            <file>$TOOLKIT_DIR$\config\devices\NuvoTon\lnk51ew_N76E003.xcl</file>
+            <file>$TOOLKIT_DIR$\lib\clib\cl-pli-nsid-2h16inc.r51</file>
+            <file>$PROJ_DIR$\Debug\List\spi.map</file>
+            <file>$PROJ_DIR$\Debug\List\MAX72xx.i</file>
+        </outputs>
+        <file>
+            <name>$PROJ_DIR$\..\..\My_Libraries\MAX6675\MAX6675.c</name>
+            <outputs>
+                <tool>
+                    <name>ICC8051</name>
+                    <file> 3 20</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 22</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 11</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICC8051</name>
+                    <file> 29 28 37 35 36 41 27 34 21</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 34 37 36 28 27 21 35 29 41</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\My_Libraries\Software Delay\soft_delay.c</name>
+            <outputs>
+                <tool>
+                    <name>ICC8051</name>
+                    <file> 2 33</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 23</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 4</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICC8051</name>
+                    <file> 30</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 30</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\main.c</name>
+            <outputs>
+                <tool>
+                    <name>ICC8051</name>
+                    <file> 15 9</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 6</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 13</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICC8051</name>
+                    <file> 29 27 34 28 37 35 36 41 30 7 21</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 37 34 7 27 28 30 21 35 29 36 41</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>[ROOT_NODE]</name>
+            <outputs>
+                <tool>
+                    <name>XLINK</name>
+                    <file> 39 45</file>
+                </tool>
+            </outputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\My_Libraries\MAX7219\MAX72xx.c</name>
+            <outputs>
+                <tool>
+                    <name>ICC8051</name>
+                    <file> 46 18</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 14</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 12</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICC8051</name>
+                    <file> 29 28 37 35 36 41 27 34 7</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 34 37 28 27 7 35 29 36 41</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\Common\Delay.c</name>
+            <outputs>
+                <tool>
+                    <name>ICC8051</name>
+                    <file> 42 40</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 32</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 10</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICC8051</name>
+                    <file> 29 27 34 28 37 35 36 41</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 36 37 34 27 28 41 29 35</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\Common\Common.c</name>
+            <outputs>
+                <tool>
+                    <name>ICC8051</name>
+                    <file> 1 31</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 38</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 5</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICC8051</name>
+                    <file> 29 27 34 28 37 35 36 41</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 36 37 34 41 27 28 35 29</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\Debug\Exe\spi.bin</name>
+            <outputs>
+                <tool>
+                    <name>XLINK</name>
+                    <file> 45</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>XLINK</name>
+                    <file> 43 31 40 9 20 18 33 44</file>
+                </tool>
+            </inputs>
+        </file>
+    </configuration>
+    <configuration>
+        <name>Release</name>
+        <outputs />
+        <forcedrebuild>
+            <name>[MULTI_TOOL]</name>
+            <tool>XLINK</tool>
+        </forcedrebuild>
+    </configuration>
+</project>

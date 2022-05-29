@@ -1,0 +1,113 @@
+C51 COMPILER V9.56.0.0   MAIN                                                              07/23/2018 21:48:50 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\..\Include;..\..\My_Libraries\
+                    -3 Wire LCD (Software Delay);..\..\My_Libraries\I2C;..\..\My_Libraries\DS1307;..\..\My_Libraries\Software Delay) DEFINE(F
+                    -OSC_160000) DEBUG OBJECTEXTEND PRINT(.\Listings\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "N76E003.h"
+   2          #include "SFR_Macro.h"
+   3          #include "Function_define.h"
+   4          #include "Common.h"
+   5          #include "Delay.h"
+   6          #include "soft_delay.h"
+   7          #include "LCD_3_Wire.h"
+   8          #include "I2C.h"
+   9          #include "DS1307.h"
+  10          
+  11          
+  12          extern struct
+  13          {
+  14             unsigned char s;
+  15             unsigned char m;
+  16             unsigned char h;
+  17             unsigned char dy;
+  18             unsigned char dt;
+  19             unsigned char mt;
+  20             unsigned char yr;
+  21          }time;
+  22          
+  23          
+  24          void show_value(unsigned char x_pos, unsigned char y_pos, unsigned char value);
+  25          void display_time(void);
+  26          
+  27          
+  28          void main(void)
+  29          {
+  30   1        time.s = 30;
+  31   1        time.m = 58;
+  32   1        time.h = 23;
+  33   1        
+  34   1        P15_PushPull_Mode;
+  35   1        
+  36   1        LCD_init();
+  37   1        LCD_clear_home();
+  38   1      
+  39   1        LCD_goto(0, 0);
+  40   1      
+  41   1        LCD_putstr("N76E003 I2C RTCC");
+  42   1      
+  43   1        DS1307_init();
+  44   1        set_time();
+  45   1        
+  46   1        while(1)
+  47   1        {
+  48   2          get_time();
+  49   2          display_time();
+  50   2        };
+  51   1      }
+  52          
+  53          
+C51 COMPILER V9.56.0.0   MAIN                                                              07/23/2018 21:48:50 PAGE 2   
+
+  54          void show_value(unsigned char x_pos, unsigned char y_pos, unsigned char value)
+  55          {
+  56   1        unsigned char chr = 0;
+  57   1      
+  58   1        chr = ((value / 10) + 0x30);
+  59   1        LCD_goto(x_pos, y_pos);
+  60   1        LCD_putchar(chr);
+  61   1      
+  62   1        chr = ((value % 10) + 0x30);
+  63   1        LCD_goto((x_pos + 1), y_pos);
+  64   1        LCD_putchar(chr);
+  65   1      }
+  66          
+  67          
+  68          void display_time(void)
+  69          {
+  70   1        P15 ^= 1;
+  71   1        LCD_goto(6, 1);
+  72   1        LCD_putchar(' ');
+  73   1        LCD_goto(9, 1);
+  74   1        LCD_putchar(' ');
+  75   1        delay_ms(400);
+  76   1      
+  77   1        show_value(4, 1, time.h);
+  78   1        show_value(7, 1, time.m);
+  79   1        show_value(10, 1, time.s);
+  80   1      
+  81   1        LCD_goto(6, 1);
+  82   1        LCD_putchar(':');
+  83   1        LCD_goto(9, 1);
+  84   1        LCD_putchar(':');
+  85   1        delay_ms(400);
+  86   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    197    ----
+   CONSTANT SIZE    =     17    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       4
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

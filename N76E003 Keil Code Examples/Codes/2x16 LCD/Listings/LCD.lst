@@ -1,0 +1,288 @@
+C51 COMPILER V9.56.0.0   LCD                                                               07/25/2018 13:06:25 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE LCD
+OBJECT MODULE PLACED IN .\Objects\LCD.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\My_Libraries\LCD\LCD.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\..\Inclu
+                    -de;..\..\My_Libraries\LCD) DEFINE(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\Listings\LCD.lst) TABS(2) OBJECT(.\Objects\LCD
+                    -.obj)
+
+line level    source
+
+   1          #include "N76E003.h"
+   2          #include "SFR_Macro.h"
+   3          #include "Function_define.h"
+   4          #include "Common.h"
+   5          #include "Delay.h"
+   6          #include "lcd.h"
+   7          
+   8          
+   9          void LCD_init(void)
+  10          {
+  11   1        Timer0_Delay1ms(10);
+  12   1      
+  13   1        LCD_GPIO_init();
+  14   1        
+  15   1        Timer0_Delay1ms(100);
+  16   1      
+  17   1        toggle_EN_pin();
+  18   1      
+  19   1        LCD_RS_LOW;
+  20   1      
+  21   1        LCD_DB7_LOW;
+  22   1        LCD_DB6_LOW;
+  23   1        LCD_DB5_HIGH;
+  24   1        LCD_DB4_HIGH;
+  25   1      
+  26   1        toggle_EN_pin();
+  27   1      
+  28   1        LCD_DB7_LOW;
+  29   1        LCD_DB6_LOW;
+  30   1        LCD_DB5_HIGH;
+  31   1        LCD_DB4_HIGH;
+  32   1      
+  33   1        toggle_EN_pin();
+  34   1      
+  35   1        LCD_DB7_LOW;
+  36   1        LCD_DB6_LOW;
+  37   1        LCD_DB5_HIGH;
+  38   1        LCD_DB4_HIGH;
+  39   1      
+  40   1        toggle_EN_pin();
+  41   1      
+  42   1        LCD_DB7_LOW;
+  43   1        LCD_DB6_LOW;
+  44   1        LCD_DB5_HIGH;
+  45   1        LCD_DB4_LOW;
+  46   1      
+  47   1        toggle_EN_pin();
+  48   1      
+  49   1        LCD_send((_4_pin_interface | _2_row_display | _5x7_dots), CMD);
+  50   1        LCD_send((display_on | cursor_off | blink_off), CMD);
+  51   1        LCD_send(clear_display, CMD);
+  52   1        LCD_send((cursor_direction_inc | display_no_shift), CMD);
+  53   1      }
+C51 COMPILER V9.56.0.0   LCD                                                               07/25/2018 13:06:25 PAGE 2   
+
+  54          
+  55          
+  56          void LCD_send(unsigned char value, unsigned char mode)
+  57          {
+  58   1        switch(mode)
+  59   1        {
+  60   2          case DAT:
+  61   2          {
+  62   3            LCD_RS_HIGH;
+  63   3            break;
+  64   3          }
+  65   2          case CMD:
+  66   2          {
+  67   3            LCD_RS_LOW;
+  68   3            break;
+  69   3          }
+  70   2        }
+  71   1      
+  72   1        LCD_4bit_send(value);
+  73   1      }
+  74          
+  75          
+  76          void LCD_4bit_send(unsigned char lcd_data)
+  77          {
+  78   1        unsigned char temp = 0;
+  79   1        
+  80   1        temp = ((lcd_data & 0x80) >> 7);
+  81   1        
+  82   1        switch(temp)
+  83   1        {
+  84   2          case 1:
+  85   2          { 
+  86   3            LCD_DB7_HIGH;
+  87   3            break;
+  88   3          }
+  89   2          default:
+  90   2          {
+  91   3            LCD_DB7_LOW;
+  92   3            break;
+  93   3          }
+  94   2        }
+  95   1        
+  96   1        temp = ((lcd_data & 0x40) >> 6);
+  97   1        
+  98   1        switch(temp)
+  99   1        {
+ 100   2          case 1:
+ 101   2          { 
+ 102   3            LCD_DB6_HIGH;
+ 103   3            break;
+ 104   3          }
+ 105   2          default:
+ 106   2          {
+ 107   3            LCD_DB6_LOW;
+ 108   3            break;
+ 109   3          }
+ 110   2        }
+ 111   1        
+ 112   1        temp = ((lcd_data & 0x20) >> 5);
+ 113   1        
+ 114   1        switch(temp)
+ 115   1        {
+C51 COMPILER V9.56.0.0   LCD                                                               07/25/2018 13:06:25 PAGE 3   
+
+ 116   2          case 1:
+ 117   2          { 
+ 118   3            LCD_DB5_HIGH;
+ 119   3            break;
+ 120   3          }
+ 121   2          default:
+ 122   2          {
+ 123   3            LCD_DB5_LOW;
+ 124   3            break;
+ 125   3          }
+ 126   2        }
+ 127   1        
+ 128   1        temp = ((lcd_data & 0x10) >> 4);
+ 129   1        
+ 130   1        switch(temp)
+ 131   1        {
+ 132   2          case 1:
+ 133   2          { 
+ 134   3            LCD_DB4_HIGH;
+ 135   3            break;
+ 136   3          }
+ 137   2          default:
+ 138   2          {
+ 139   3            LCD_DB4_LOW;
+ 140   3            break;
+ 141   3          }
+ 142   2        }
+ 143   1      
+ 144   1        toggle_EN_pin();
+ 145   1      
+ 146   1        temp = ((lcd_data & 0x08) >> 3);
+ 147   1        
+ 148   1        switch(temp)
+ 149   1        {
+ 150   2          case 1:
+ 151   2          { 
+ 152   3            LCD_DB7_HIGH;
+ 153   3            break;
+ 154   3          }
+ 155   2          default:
+ 156   2          {
+ 157   3            LCD_DB7_LOW;
+ 158   3            break;
+ 159   3          }
+ 160   2        }
+ 161   1        
+ 162   1        temp = ((lcd_data & 0x04) >> 2);
+ 163   1        
+ 164   1        switch(temp)
+ 165   1        {
+ 166   2          case 1:
+ 167   2          { 
+ 168   3            LCD_DB6_HIGH;
+ 169   3            break;
+ 170   3          }
+ 171   2          default:
+ 172   2          {
+ 173   3            LCD_DB6_LOW;
+ 174   3            break;
+ 175   3          }
+ 176   2        }
+ 177   1        
+C51 COMPILER V9.56.0.0   LCD                                                               07/25/2018 13:06:25 PAGE 4   
+
+ 178   1        temp = ((lcd_data & 0x02) >> 1);
+ 179   1        
+ 180   1        switch(temp)
+ 181   1        {
+ 182   2          case 1:
+ 183   2          { 
+ 184   3            LCD_DB5_HIGH;
+ 185   3            break;
+ 186   3          }
+ 187   2          default:
+ 188   2          {
+ 189   3            LCD_DB5_LOW;
+ 190   3            break;
+ 191   3          }
+ 192   2        }
+ 193   1        
+ 194   1        temp = ((lcd_data & 0x01));
+ 195   1        
+ 196   1        switch(temp)
+ 197   1        {
+ 198   2          case 1:
+ 199   2          { 
+ 200   3            LCD_DB4_HIGH;
+ 201   3            break;
+ 202   3          }
+ 203   2          default:
+ 204   2          {
+ 205   3            LCD_DB4_LOW;
+ 206   3            break;
+ 207   3          }
+ 208   2        }
+ 209   1      
+ 210   1        toggle_EN_pin();
+ 211   1      }
+ 212          
+ 213          
+ 214          void LCD_putstr(char *lcd_string)
+ 215          {
+ 216   1        do
+ 217   1        {
+ 218   2          LCD_send(*lcd_string++, DAT);
+ 219   2        }while(*lcd_string != '\0');
+ 220   1      }
+ 221          
+ 222          
+ 223          void LCD_putchar(char char_data)
+ 224          {
+ 225   1        LCD_send(char_data, DAT);
+ 226   1      }
+ 227          
+ 228          
+ 229          void LCD_clear_home(void)
+ 230          {
+ 231   1        LCD_send(clear_display, CMD);
+ 232   1        LCD_send(goto_home, CMD);
+ 233   1      }
+ 234          
+ 235          
+ 236          void LCD_goto(unsigned char x_pos, unsigned char y_pos)
+ 237          {
+ 238   1        if(y_pos == 0)
+ 239   1        {
+C51 COMPILER V9.56.0.0   LCD                                                               07/25/2018 13:06:25 PAGE 5   
+
+ 240   2          LCD_send((0x80 | x_pos), CMD);
+ 241   2        }
+ 242   1        else
+ 243   1        {
+ 244   2          LCD_send((0x80 | 0x40 | x_pos), CMD);
+ 245   2        }
+ 246   1      }
+ 247          
+ 248          
+ 249          void toggle_EN_pin(void)
+ 250          {
+ 251   1        LCD_EN_HIGH;
+ 252   1        Timer0_Delay1ms(4);
+ 253   1        LCD_EN_LOW;
+ 254   1        Timer0_Delay1ms(4);
+ 255   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    385    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       5
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

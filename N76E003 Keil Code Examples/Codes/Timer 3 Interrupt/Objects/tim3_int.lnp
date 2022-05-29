@@ -1,0 +1,7 @@
+".\Objects\main.obj",
+".\Objects\Common.obj",
+".\Objects\Delay.obj",
+".\Objects\STARTUP.obj" 
+TO ".\Objects\tim3_int" 
+PRINT(".\Listings\tim3_int.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 

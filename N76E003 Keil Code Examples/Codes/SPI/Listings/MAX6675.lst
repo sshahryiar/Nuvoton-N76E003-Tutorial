@@ -1,0 +1,160 @@
+C51 COMPILER V9.56.0.0   MAX6675                                                           07/22/2018 20:59:02 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MAX6675
+OBJECT MODULE PLACED IN .\Objects\MAX6675.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\My_Libraries\MAX6675\MAX6675.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\
+                    -..\Include;..\..\My_Libraries\MAX6675;..\..\My_Libraries\MAX7219;..\..\My_Libraries\Software Delay) DEFINE(FOSC_160000) 
+                    -DEBUG OBJECTEXTEND PRINT(.\Listings\MAX6675.lst) TABS(2) OBJECT(.\Objects\MAX6675.obj)
+
+line level    source
+
+   1          #include "N76E003.h"
+   2          #include "SFR_Macro.h"
+   3          #include "Function_define.h"
+   4          #include "Common.h"
+   5          #include "Delay.h"
+   6          #include "MAX6675.h"
+   7          
+   8          
+   9          void MAX6675_SPI_HW_Init(unsigned char clk_value)
+  10          {
+  11   1        switch(clk_value)
+  12   1        {
+  13   2          case 1:
+  14   2          {
+  15   3            clr_SPR1;
+  16   3            set_SPR0;
+  17   3            break;
+  18   3          }
+  19   2          case 2:
+  20   2          {
+  21   3            set_SPR1;
+  22   3            clr_SPR0;
+  23   3            break;
+  24   3          }
+  25   2          case 3:
+  26   2          {
+  27   3            set_SPR1;
+  28   3            set_SPR0;
+  29   3            break;
+  30   3          }
+  31   2          default:
+  32   2          {
+  33   3            clr_SPR1;
+  34   3            clr_SPR0;
+  35   3            break;
+  36   3          }
+  37   2        }   
+  38   1        
+  39   1        set_DISMODF;
+  40   1        set_MSTR;
+  41   1        clr_CPOL;
+  42   1        set_CPHA;
+  43   1        set_SPIEN;
+  44   1      }
+  45          
+  46          
+  47          void MAX6675_init(void)
+  48          {
+  49   1        MAX6675_SPI_GPIO_init();
+  50   1        MAX6675_SPI_HW_Init(0);
+  51   1      }
+  52          
+  53          
+C51 COMPILER V9.56.0.0   MAX6675                                                           07/22/2018 20:59:02 PAGE 2   
+
+  54          unsigned char MAX6675_get_ADC(unsigned int *ADC_data)
+  55          {
+  56   1        unsigned char lb = 0;
+  57   1        unsigned char hb = 0;
+  58   1        unsigned char samples = no_of_samples;
+  59   1        unsigned int temp_data = 0;
+  60   1        unsigned long avg_value = 0;
+  61   1      
+  62   1      
+  63   1        while(samples > 0)
+  64   1        {
+  65   2           MAX6675_CS_OUT_LOW();
+  66   2            
+  67   2           SPDR = 0x00;
+  68   2           while(!(SPSR & SET_BIT7));  
+  69   2           hb = SPDR;
+  70   2           clr_SPIF;  
+  71   2      
+  72   2           SPDR = 0x00;
+  73   2           while(!(SPSR & SET_BIT7));          
+  74   2           lb = SPDR;
+  75   2           clr_SPIF;    
+  76   2      
+  77   2           MAX6675_CS_OUT_HIGH();
+  78   2           
+  79   2           temp_data = hb;
+  80   2           temp_data <<= 8;
+  81   2           temp_data |= lb;
+  82   2           temp_data &= 0x7FFF;
+  83   2           
+  84   2           avg_value += (unsigned long)temp_data;
+  85   2           
+  86   2           samples--;
+  87   2           Timer0_Delay1ms(10);
+  88   2        };
+  89   1      
+  90   1        temp_data = (avg_value >> 4);
+  91   1      
+  92   1        if((temp_data & 0x04) == close_contact)
+  93   1        {
+  94   2          *ADC_data = (temp_data >> 3);
+  95   2          return close_contact;
+  96   2        }
+  97   1        else
+  98   1        {
+  99   2          *ADC_data = (count_max + 1);
+ 100   2          return open_contact;
+ 101   2        }
+ 102   1      }
+ 103          
+ 104          
+ 105          float MAX6675_get_T(unsigned int ADC_value, unsigned char T_unit)
+ 106          {
+ 107   1        float tmp = 0.0;
+ 108   1      
+ 109   1        tmp = (((float)ADC_value) * scalar_deg_C);
+ 110   1      
+ 111   1        switch(T_unit)
+ 112   1        {
+ 113   2          case deg_F:
+ 114   2          {
+ 115   3             tmp *= scalar_deg_F_1;
+C51 COMPILER V9.56.0.0   MAX6675                                                           07/22/2018 20:59:02 PAGE 3   
+
+ 116   3             tmp += scalar_deg_F_2;
+ 117   3             break;
+ 118   3          }
+ 119   2          case tmp_K:
+ 120   2          {
+ 121   3            tmp += scalar_tmp_K;
+ 122   3            break;
+ 123   3          }
+ 124   2          default:
+ 125   2          {
+ 126   3            break;
+ 127   3          }
+ 128   2        }
+ 129   1      
+ 130   1        return tmp;
+ 131   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    380    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      17
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

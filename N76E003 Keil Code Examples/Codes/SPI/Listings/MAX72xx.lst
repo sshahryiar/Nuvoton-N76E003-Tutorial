@@ -1,0 +1,99 @@
+C51 COMPILER V9.56.0.0   MAX72XX                                                           07/22/2018 20:59:02 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MAX72XX
+OBJECT MODULE PLACED IN .\Objects\MAX72xx.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\My_Libraries\MAX7219\MAX72xx.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\
+                    -..\Include;..\..\My_Libraries\MAX6675;..\..\My_Libraries\MAX7219;..\..\My_Libraries\Software Delay) DEFINE(FOSC_160000) 
+                    -DEBUG OBJECTEXTEND PRINT(.\Listings\MAX72xx.lst) TABS(2) OBJECT(.\Objects\MAX72xx.obj)
+
+line level    source
+
+   1          #include "N76E003.h"
+   2          #include "SFR_Macro.h"
+   3          #include "Function_define.h"
+   4          #include "Common.h"
+   5          #include "Delay.h"
+   6          #include "MAX72xx.h"
+   7          
+   8          
+   9          void MAX72xx_SPI_HW_Init(unsigned char clk_value)
+  10          {
+  11   1        switch(clk_value)
+  12   1        {
+  13   2          case 1:
+  14   2          {
+  15   3            clr_SPR1;
+  16   3            set_SPR0;
+  17   3            break;
+  18   3          }
+  19   2          case 2:
+  20   2          {
+  21   3            set_SPR1;
+  22   3            clr_SPR0;
+  23   3            break;
+  24   3          }
+  25   2          case 3:
+  26   2          {
+  27   3            set_SPR1;
+  28   3            set_SPR0;
+  29   3            break;
+  30   3          }
+  31   2          default:
+  32   2          {
+  33   3            clr_SPR1;
+  34   3            clr_SPR0;
+  35   3            break;
+  36   3          }
+  37   2        }   
+  38   1        
+  39   1        set_DISMODF;
+  40   1        set_MSTR;
+  41   1        clr_CPOL;
+  42   1        clr_CPHA;
+  43   1        set_SPIEN;
+  44   1      }
+  45          
+  46          
+  47          void MAX72xx_init(void)
+  48          {
+  49   1        MAX72xx_SPI_GPIO_init();
+  50   1        MAX72xx_SPI_HW_Init(0);
+  51   1      
+  52   1        MAX72xx_write(shutdown_reg, run_cmd);
+  53   1        MAX72xx_write(decode_mode_reg, Code_B_decode_digit_0_to_3);
+C51 COMPILER V9.56.0.0   MAX72XX                                                           07/22/2018 20:59:02 PAGE 2   
+
+  54   1        MAX72xx_write(scan_limit_reg, digit_0_to_3);
+  55   1        MAX72xx_write(intensity_reg, 0x19);
+  56   1      }
+  57          
+  58          
+  59          void MAX72xx_write(unsigned char address, unsigned char value)
+  60          {
+  61   1        MAX72xx_CS_OUT_LOW(); 
+  62   1      
+  63   1        SPDR = address;
+  64   1        while(!(SPSR & SET_BIT7));  
+  65   1        clr_SPIF;
+  66   1      
+  67   1        SPDR = value;
+  68   1        while(!(SPSR & SET_BIT7));  
+  69   1        clr_SPIF;
+  70   1      
+  71   1        MAX72xx_CS_OUT_HIGH();
+  72   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    128    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

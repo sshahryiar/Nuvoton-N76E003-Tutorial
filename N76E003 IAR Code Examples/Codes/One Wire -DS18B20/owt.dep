@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+    <fileVersion>2</fileVersion>
+    <fileChecksum>3752347709</fileChecksum>
+    <configuration>
+        <name>Debug</name>
+        <outputs>
+            <file>$PROJ_DIR$\Debug\List\main.i</file>
+            <file>$PROJ_DIR$\Debug\Obj\DS18B20.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\Delay.r51</file>
+            <file>$PROJ_DIR$\Debug\Obj\one_wire.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\LCD_3_Wire.r51</file>
+            <file>$PROJ_DIR$\Debug\Obj\DS18B20.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\Common.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\LCD_3_Wire.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\List\owt.map</file>
+            <file>$TOOLKIT_DIR$\inc\clib\stdio.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\main.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\LCD_3_Wire.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\Common.pbi</file>
+            <file>$PROJ_DIR$\..\..\Include\Delay.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\soft_delay.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\main.__cstat.et</file>
+            <file>$PROJ_DIR$\..\..\My_Libraries\3 Wire LCD (Software Delay)\LCD_3_Wire.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\Delay.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Exe\owt.bin</file>
+            <file>$PROJ_DIR$\..\..\Include\SFR_Macro.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\soft_delay.__cstat.et</file>
+            <file>$PROJ_DIR$\..\..\Include\N76E003_iar.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\soft_delay.r51</file>
+            <file>$PROJ_DIR$\Debug\Obj\one_wire.r51</file>
+            <file>$PROJ_DIR$\..\..\My_Libraries\DS18B20\DS18B20.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\Delay.pbi</file>
+            <file>$PROJ_DIR$\..\..\My_Libraries\DS18B20\one_wire.h</file>
+            <file>$PROJ_DIR$\..\..\Include\Function_define.h</file>
+            <file>$TOOLKIT_DIR$\inc\clib\sysmac.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\main.r51</file>
+            <file>$PROJ_DIR$\Debug\Obj\DS18B20.r51</file>
+            <file>$PROJ_DIR$\..\..\Include\Common.h</file>
+            <file>$PROJ_DIR$\..\..\My_Libraries\Software Delay\soft_delay.c</file>
+            <file>$PROJ_DIR$\Debug\Obj\owt.pbd</file>
+            <file>$PROJ_DIR$\..\..\My_Libraries\Software Delay\soft_delay.h</file>
+            <file>$PROJ_DIR$\..\..\Common\Common.c</file>
+            <file>$PROJ_DIR$\..\..\My_Libraries\DS18B20\DS18B20.c</file>
+            <file>$PROJ_DIR$\..\..\My_Libraries\3 Wire LCD (Software Delay)\LCD_3_Wire.c</file>
+            <file>$PROJ_DIR$\..\..\My_Libraries\DS18B20\one_wire.c</file>
+            <file>$PROJ_DIR$\main.c</file>
+            <file>$PROJ_DIR$\..\..\Common\Delay.c</file>
+            <file>$PROJ_DIR$\Debug\Obj\Common.r51</file>
+            <file>$TOOLKIT_DIR$\inc\clib\stdarg.h</file>
+            <file>$PROJ_DIR$\Debug\List\Delay.i</file>
+            <file>$PROJ_DIR$\Debug\List\LCD_3_Wire.i</file>
+            <file>$PROJ_DIR$\Debug\List\Common.i</file>
+            <file>$PROJ_DIR$\Debug\List\soft_delay.i</file>
+            <file>$PROJ_DIR$\Debug\List\one_wire.i</file>
+            <file>$PROJ_DIR$\Debug\List\DS18B20.i</file>
+        </outputs>
+        <file>
+            <name>$PROJ_DIR$\..\..\My_Libraries\Software Delay\soft_delay.c</name>
+            <outputs>
+                <tool>
+                    <name>ICC8051</name>
+                    <file> 46 22</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 14</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 20</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICC8051</name>
+                    <file> 34</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 34</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\Common\Common.c</name>
+            <outputs>
+                <tool>
+                    <name>ICC8051</name>
+                    <file> 45 41</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 12</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 6</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICC8051</name>
+                    <file> 21 31 13 19 27 9 42 28</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 42 27 13 28 31 19 9 21</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\My_Libraries\DS18B20\DS18B20.c</name>
+            <outputs>
+                <tool>
+                    <name>ICC8051</name>
+                    <file> 48 30</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 1</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 5</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICC8051</name>
+                    <file> 21 19 27 9 42 28 31 13 34 24 26</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 13 27 24 42 28 19 31 34 9 21 26</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\My_Libraries\3 Wire LCD (Software Delay)\LCD_3_Wire.c</name>
+            <outputs>
+                <tool>
+                    <name>ICC8051</name>
+                    <file> 44 4</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 11</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 7</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICC8051</name>
+                    <file> 21 19 27 9 42 28 31 34 16</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 34 27 9 28 19 31 16 42 21</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\My_Libraries\DS18B20\one_wire.c</name>
+            <outputs>
+                <tool>
+                    <name>ICC8051</name>
+                    <file> 47 23</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 3</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICC8051</name>
+                    <file> 21 19 27 9 42 28 31 13 34 26</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 13 27 26 9 19 31 34 42 28 21</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\main.c</name>
+            <outputs>
+                <tool>
+                    <name>ICC8051</name>
+                    <file> 0 29</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 10</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 15</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICC8051</name>
+                    <file> 21 19 27 9 42 28 31 13 34 24 26 16</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 13 27 24 26 19 31 34 16 9 21 42 28</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\Common\Delay.c</name>
+            <outputs>
+                <tool>
+                    <name>ICC8051</name>
+                    <file> 43 2</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 25</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 17</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICC8051</name>
+                    <file> 21 31 13 19 27 9 42 28</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 42 27 13 31 19 28 21 9</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>[ROOT_NODE]</name>
+            <outputs>
+                <tool>
+                    <name>XLINK</name>
+                    <file> 18</file>
+                </tool>
+            </outputs>
+        </file>
+    </configuration>
+    <configuration>
+        <name>Release</name>
+        <outputs />
+        <forcedrebuild>
+            <name>[MULTI_TOOL]</name>
+            <tool>XLINK</tool>
+        </forcedrebuild>
+    </configuration>
+</project>

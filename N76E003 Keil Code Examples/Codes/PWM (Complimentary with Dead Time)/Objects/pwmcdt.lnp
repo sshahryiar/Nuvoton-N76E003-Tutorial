@@ -1,0 +1,7 @@
+".\Objects\main.obj",
+".\Objects\Common.obj",
+".\Objects\Delay.obj",
+".\Objects\STARTUP.obj" 
+TO ".\Objects\pwmcdt" 
+PRINT(".\Listings\pwmcdt.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 

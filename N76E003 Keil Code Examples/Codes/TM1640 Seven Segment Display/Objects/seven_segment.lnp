@@ -1,0 +1,8 @@
+".\Objects\main.obj",
+".\Objects\Common.obj",
+".\Objects\Delay.obj",
+".\Objects\TM1640.obj",
+".\Objects\STARTUP.obj" 
+TO ".\Objects\seven_segment" 
+PRINT(".\Listings\seven_segment.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 

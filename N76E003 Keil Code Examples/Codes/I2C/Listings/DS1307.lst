@@ -1,0 +1,145 @@
+C51 COMPILER V9.56.0.0   DS1307                                                            07/23/2018 21:48:51 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE DS1307
+OBJECT MODULE PLACED IN .\Objects\DS1307.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\My_Libraries\DS1307\DS1307.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\..
+                    -\Include;..\..\My_Libraries\3 Wire LCD (Software Delay);..\..\My_Libraries\I2C;..\..\My_Libraries\DS1307;..\..\My_Librar
+                    -ies\Software Delay) DEFINE(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\Listings\DS1307.lst) TABS(2) OBJECT(.\Objects\DS1307.
+                    -obj)
+
+line level    source
+
+   1          #include "N76E003.h"
+   2          #include "SFR_Macro.h"
+   3          #include "Function_define.h"
+   4          #include "Common.h"
+   5          #include "Delay.h"
+   6          #include "DS1307.h"
+   7          #include "I2C.h"
+   8          
+   9          
+  10          struct
+  11          {
+  12             unsigned char s;
+  13             unsigned char m;
+  14             unsigned char h;
+  15             unsigned char dy;
+  16             unsigned char dt;
+  17             unsigned char mt;
+  18             unsigned char yr;
+  19          }time;
+  20          
+  21          
+  22          void DS1307_init(void)
+  23          {
+  24   1        I2C_init();
+  25   1        DS1307_write(control_reg, 0x00);
+  26   1      }
+  27          
+  28          
+  29          unsigned char DS1307_read(unsigned char address)
+  30          {
+  31   1        unsigned char value = 0x00;
+  32   1      
+  33   1        I2C_start();
+  34   1        I2C_write(DS1307_WR);
+  35   1        I2C_write(address);
+  36   1      
+  37   1        I2C_start();
+  38   1        I2C_write(DS1307_RD);
+  39   1        value = I2C_read(I2C_NACK);
+  40   1        I2C_stop();
+  41   1        
+  42   1        return value;
+  43   1      }
+  44          
+  45          
+  46          void DS1307_write(unsigned char address, unsigned char value)
+  47          {
+  48   1        I2C_start();
+  49   1        I2C_write(DS1307_WR);
+  50   1        I2C_write(address);
+  51   1        I2C_write(value);
+  52   1        I2C_stop();
+C51 COMPILER V9.56.0.0   DS1307                                                            07/23/2018 21:48:51 PAGE 2   
+
+  53   1      }
+  54          
+  55          
+  56          unsigned char bcd_to_decimal(unsigned char value)
+  57          {
+  58   1        return ((value & 0x0F) + (((value & 0xF0) >> 0x04) * 0x0A));
+  59   1      }
+  60          
+  61          
+  62          unsigned char decimal_to_bcd(unsigned char value)
+  63          {
+  64   1        return (((value / 0x0A) << 0x04) & 0xF0) | ((value % 0x0A) & 0x0F);
+  65   1      }
+  66          
+  67          
+  68          void get_time(void)
+  69          {
+  70   1        time.s = DS1307_read(sec_reg);
+  71   1        time.s = bcd_to_decimal(time.s);
+  72   1        
+  73   1        time.m = DS1307_read(min_reg);
+  74   1        time.m = bcd_to_decimal(time.m);
+  75   1        
+  76   1        time.h = DS1307_read(hr_reg);
+  77   1        time.h = bcd_to_decimal(time.h);
+  78   1        
+  79   1        time.dy = DS1307_read(day_reg);
+  80   1        time.dy = bcd_to_decimal(time.dy);
+  81   1        
+  82   1        time.dt = DS1307_read(date_reg);
+  83   1        time.dt = bcd_to_decimal(time.dt);
+  84   1        
+  85   1        time.mt = DS1307_read(month_reg);
+  86   1        time.mt = bcd_to_decimal(time.mt);
+  87   1        
+  88   1        time.yr = DS1307_read(year_reg);
+  89   1        time.yr = bcd_to_decimal(time.yr);
+  90   1      }
+  91          
+  92          
+  93          void set_time(void)
+  94          {
+  95   1        time.s = decimal_to_bcd(time.s);
+  96   1        DS1307_write(sec_reg, time.s);
+  97   1        
+  98   1        time.m = decimal_to_bcd(time.m);
+  99   1        DS1307_write(min_reg, time.m);
+ 100   1        
+ 101   1        time.h = decimal_to_bcd(time.h);
+ 102   1        DS1307_write(hr_reg, time.h);
+ 103   1        
+ 104   1        time.dy = decimal_to_bcd(time.dy);
+ 105   1        DS1307_write(day_reg, time.dy);
+ 106   1        
+ 107   1        time.dt = decimal_to_bcd(time.dt);
+ 108   1        DS1307_write(date_reg, time.dt);
+ 109   1        
+ 110   1        time.mt = decimal_to_bcd(time.mt);
+ 111   1        DS1307_write(month_reg, time.mt);
+ 112   1        
+ 113   1        time.yr = decimal_to_bcd(time.yr);
+ 114   1        DS1307_write(year_reg, time.yr);
+C51 COMPILER V9.56.0.0   DS1307                                                            07/23/2018 21:48:51 PAGE 3   
+
+ 115   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    295    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      7       4
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,7 @@
+".\Objects\GPIO.obj",
+".\Objects\Common.obj",
+".\Objects\Delay.obj",
+".\Objects\STARTUP.obj" 
+TO ".\Objects\GPIO" 
+PRINT(".\Listings\GPIO.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 

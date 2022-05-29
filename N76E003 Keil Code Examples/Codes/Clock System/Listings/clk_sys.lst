@@ -1,0 +1,159 @@
+C51 COMPILER V9.56.0.0   CLK_SYS                                                           07/25/2018 13:01:42 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE CLK_SYS
+OBJECT MODULE PLACED IN .\Objects\clk_sys.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE clk_sys.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\..\Include) DEFINE(FOSC_160
+                    -000) DEBUG OBJECTEXTEND PRINT(.\Listings\clk_sys.lst) TABS(2) OBJECT(.\Objects\clk_sys.obj)
+
+line level    source
+
+   1          #include "N76E003.h"
+   2          #include "SFR_Macro.h"
+   3          #include "Function_define.h"
+   4          #include "Common.h"
+   5          #include "Delay.h"
+   6          
+   7          
+   8          #define HIRC    0
+   9          #define LIRC          1
+  10          #define ECLK    2
+  11          
+  12          
+  13          void set_clock_source(unsigned char clock_source);
+  14          void disable_clock_source(unsigned char clock_source);
+  15          void set_clock_division_factor(unsigned char value);
+  16          
+  17          
+  18          void main(void)
+  19          {
+  20   1        signed char i = 30;     
+  21   1      
+  22   1        P11_PushPull_Mode;  
+  23   1        P15_PushPull_Mode;
+  24   1      
+  25   1        set_clock_division_factor(0);
+  26   1        set_clock_source(HIRC);
+  27   1      
+  28   1        set_CLOEN;
+  29   1      
+  30   1        while(i > 0)                                  
+  31   1        {   
+  32   2          clr_P15;                            
+  33   2          Timer0_Delay1ms(100);
+  34   2          set_P15;
+  35   2          Timer0_Delay1ms(100);
+  36   2          i--;
+  37   2        }
+  38   1        
+  39   1        set_clock_source(ECLK);
+  40   1        disable_clock_source(HIRC);
+  41   1        
+  42   1        i = 30;
+  43   1        
+  44   1        while(i > 0)                                  
+  45   1        {   
+  46   2          clr_P15;                            
+  47   2          Timer0_Delay1ms(100);
+  48   2          set_P15;
+  49   2          Timer0_Delay1ms(100);
+  50   2          i--;
+  51   2        }
+  52   1      
+  53   1        set_clock_source(LIRC);
+  54   1        disable_clock_source(HIRC);
+C51 COMPILER V9.56.0.0   CLK_SYS                                                           07/25/2018 13:01:42 PAGE 2   
+
+  55   1      
+  56   1        while(1)
+  57   1        {
+  58   2          clr_P15;                            
+  59   2          Timer0_Delay1ms(1);
+  60   2          set_P15;
+  61   2          Timer0_Delay1ms(1);
+  62   2        };
+  63   1      }
+  64          
+  65          
+  66          void set_clock_source(unsigned char clock_source)
+  67          {
+  68   1        switch(clock_source)
+  69   1        {
+  70   2          case LIRC:
+  71   2          {
+  72   3            set_OSC1;                     
+  73   3            clr_OSC0;  
+  74   3            
+  75   3            break;
+  76   3          }
+  77   2          
+  78   2          case ECLK:
+  79   2          {
+  80   3            set_EXTEN1;
+  81   3            set_EXTEN0;
+  82   3            
+  83   3            while((CKSWT & SET_BIT3) == 0); 
+  84   3            
+  85   3            clr_OSC1;                     
+  86   3            set_OSC0; 
+  87   3            
+  88   3            break;
+  89   3          }
+  90   2          
+  91   2          default:
+  92   2          {
+  93   3            set_HIRCEN;         
+  94   3            
+  95   3            while((CKSWT & SET_BIT5) == 0);   
+  96   3            
+  97   3            clr_OSC1;                       
+  98   3            clr_OSC0;
+  99   3            
+ 100   3            break;
+ 101   3          }
+ 102   2        }
+ 103   1      
+ 104   1        while((CKEN & SET_BIT0) == 1);  
+ 105   1      }
+ 106          
+ 107          
+ 108          void disable_clock_source(unsigned char clock_source)
+ 109          {
+ 110   1        switch(clock_source)
+ 111   1        {
+ 112   2          case HIRC:
+ 113   2          {
+ 114   3            clr_HIRCEN;
+ 115   3            break;
+ 116   3          }
+C51 COMPILER V9.56.0.0   CLK_SYS                                                           07/25/2018 13:01:42 PAGE 3   
+
+ 117   2          
+ 118   2          default:
+ 119   2          {
+ 120   3            clr_EXTEN1;
+ 121   3            clr_EXTEN0;
+ 122   3            break;
+ 123   3          }
+ 124   2        }
+ 125   1      }
+ 126          
+ 127          
+ 128          void set_clock_division_factor(unsigned char value)
+ 129          {
+ 130   1        CKDIV = value;
+ 131   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    389    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

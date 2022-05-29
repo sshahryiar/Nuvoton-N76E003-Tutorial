@@ -1,0 +1,8 @@
+".\Objects\lcd_test.obj",
+".\Objects\Common.obj",
+".\Objects\Delay.obj",
+".\Objects\STARTUP.obj",
+".\Objects\LCD.obj" 
+TO ".\Objects\lcd_test" 
+PRINT(".\Listings\lcd_test.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 

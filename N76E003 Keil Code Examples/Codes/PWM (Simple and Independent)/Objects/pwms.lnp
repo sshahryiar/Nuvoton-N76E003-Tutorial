@@ -1,0 +1,9 @@
+".\Objects\main.obj",
+".\Objects\Common.obj",
+".\Objects\Delay.obj",
+".\Objects\STARTUP.obj",
+".\Objects\soft_delay.obj" 
+TO ".\Objects\pwms" 
+PRINT(".\Listings\pwms.m51") IXREF 
+RAMSIZE(256) 
+DISABLEWARNING (16) 

@@ -1,0 +1,11 @@
+".\Objects\main.obj",
+".\Objects\Common.obj",
+".\Objects\Delay.obj",
+".\Objects\soft_delay.obj",
+".\Objects\DS18B20.obj",
+".\Objects\one_wire.obj",
+".\Objects\LCD_3_Wire.obj",
+".\Objects\STARTUP.obj" 
+TO ".\Objects\ow1820" 
+PRINT(".\Listings\ow1820.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 

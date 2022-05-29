@@ -1,0 +1,12 @@
+".\Objects\main.obj",
+".\Objects\HMC1022.obj",
+".\Objects\soft_delay.obj",
+".\Objects\LCD_2_Wire.obj",
+".\Objects\PCF8574.obj",
+".\Objects\SW_I2C.obj",
+".\Objects\Common.obj",
+".\Objects\Delay.obj",
+".\Objects\STARTUP.obj" 
+TO ".\Objects\uart" 
+PRINT(".\Listings\uart.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 

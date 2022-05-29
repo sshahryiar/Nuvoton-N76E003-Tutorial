@@ -1,0 +1,1 @@
+"..\..\My_Libraries\2 Wire LCD  (Software Delay)\LCD_2_Wire.c" OPTIMIZE (8,SPEED) BROWSE INCDIR(..\..\Include;..\..\My_Libraries\2 Wire LCD  (Software Delay);..\..\My_Libraries\Software Delay) DEFINE (FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\Listings\LCD_2_Wire.lst) TABS (2) OBJECT(.\Objects\LCD_2_Wire.obj)

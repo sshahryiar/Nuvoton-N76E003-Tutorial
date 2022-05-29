@@ -1,0 +1,126 @@
+C51 COMPILER V9.56.0.0   ONE_WIRE                                                          08/03/2018 12:36:37 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE ONE_WIRE
+OBJECT MODULE PLACED IN .\Objects\one_wire.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\My_Libraries\DS18B20\one_wire.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..
+                    -\..\Include;..\..\My_Libraries\Software Delay;..\..\My_Libraries\DS18B20;..\..\My_Libraries\3 Wire LCD (Software Delay))
+                    - DEFINE(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\Listings\one_wire.lst) TABS(2) OBJECT(.\Objects\one_wire.obj)
+
+line level    source
+
+   1          #include "N76E003.h"
+   2          #include "SFR_Macro.h"
+   3          #include "Function_define.h"
+   4          #include "Common.h"
+   5          #include "Delay.h"
+   6          #include "soft_delay.h"
+   7          #include "one_wire.h"
+   8              
+   9          
+  10          unsigned char onewire_reset(void)  
+  11          {                                         
+  12   1         unsigned char res = FALSE; 
+  13   1         
+  14   1         DS18B20_GPIO_init();
+  15   1        
+  16   1         DS18B20_OUT_LOW();
+  17   1         delay_us(480);        
+  18   1         DS18B20_OUT_HIGH();
+  19   1         delay_us(60);        
+  20   1      
+  21   1         res = DS18B20_IN();
+  22   1         delay_us(480);       
+  23   1         
+  24   1         return res; 
+  25   1      } 
+  26          
+  27          
+  28          void onewire_write_bit(unsigned char bit_value)
+  29          {
+  30   1        DS18B20_OUT_LOW(); 
+  31   1          
+  32   1        if(bit_value)
+  33   1        {       
+  34   2          delay_us(104);
+  35   2          DS18B20_OUT_HIGH();   
+  36   2        }              
+  37   1      }     
+  38          
+  39          
+  40          unsigned char onewire_read_bit(void)        
+  41          {     
+  42   1        DS18B20_OUT_LOW();  
+  43   1        DS18B20_OUT_HIGH();  
+  44   1        delay_us(15); 
+  45   1      
+  46   1        return(DS18B20_IN());    
+  47   1      }
+  48          
+  49          
+  50          void onewire_write(unsigned char value) 
+  51          {                    
+  52   1         unsigned char s = 0; 
+  53   1      
+C51 COMPILER V9.56.0.0   ONE_WIRE                                                          08/03/2018 12:36:37 PAGE 2   
+
+  54   1         while(s < 8)    
+  55   1         {                              
+  56   2            if((value & (1 << s)))
+  57   2            {
+  58   3              DS18B20_OUT_LOW(); 
+  59   3              nop;
+  60   3              DS18B20_OUT_HIGH();  
+  61   3              delay_us(60);   
+  62   3            }       
+  63   2                                
+  64   2            else
+  65   2            {
+  66   3              DS18B20_OUT_LOW();           
+  67   3              delay_us(60);           
+  68   3              DS18B20_OUT_HIGH();   
+  69   3              nop;
+  70   3            }
+  71   2      
+  72   2            s++;
+  73   2         }
+  74   1      }                                      
+  75          
+  76          
+  77          unsigned char onewire_read(void)
+  78          {
+  79   1         unsigned char s = 0x00;
+  80   1         unsigned char value = 0x00;
+  81   1        
+  82   1         while(s < 8) 
+  83   1         {
+  84   2            DS18B20_OUT_LOW();
+  85   2            nop;
+  86   2            DS18B20_OUT_HIGH();  
+  87   2            
+  88   2            if(DS18B20_IN())  
+  89   2            {                                      
+  90   3                value |=  (1 << s);                         
+  91   3            }        
+  92   2             
+  93   2            delay_us(60);
+  94   2      
+  95   2            s++;
+  96   2         }     
+  97   1         
+  98   1         return value;
+  99   1      }                       
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    185    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       5
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

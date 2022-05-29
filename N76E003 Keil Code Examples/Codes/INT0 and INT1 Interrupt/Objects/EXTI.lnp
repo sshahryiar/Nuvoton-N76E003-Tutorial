@@ -1,0 +1,7 @@
+".\Objects\EXTI.obj",
+".\Objects\Common.obj",
+".\Objects\Delay.obj",
+".\Objects\STARTUP.obj" 
+TO ".\Objects\EXTI" 
+PRINT(".\Listings\EXTI.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 

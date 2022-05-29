@@ -1,0 +1,113 @@
+C51 COMPILER V9.56.0.0   MAIN                                                              07/25/2018 15:43:54 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\..\Include;..\..\My_Libraries\
+                    -2 Wire LCD  (Software Delay);..\..\My_Libraries\HMC1022;..\..\My_Libraries\Software Delay) DEFINE(FOSC_160000) DEBUG OBJ
+                    -ECTEXTEND PRINT(.\Listings\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "N76E003.h"
+   2          #include "SFR_Macro.h"
+   3          #include "Function_define.h"
+   4          #include "Common.h"
+   5          #include "Delay.h"
+   6          #include "soft_delay.h"
+   7          #include "LCD_2_Wire.h"
+   8          #include "HMC1022.h"
+   9          
+  10          
+  11          const unsigned char symbol[8] = 
+  12          {
+  13             0x00, 0x06, 0x09, 0x09, 0x06, 0x00, 0x00, 0x00
+  14          };
+  15          
+  16          
+  17          extern unsigned char done;
+  18          extern unsigned char data_bytes[no_of_data_bytes_returned];
+  19          
+  20          
+  21          void setup(void);
+  22          void lcd_symbol(void);
+  23          
+  24          
+  25          void main(void)
+  26          {
+  27   1        setup();
+  28   1        
+  29   1        while(1)
+  30   1        {
+  31   2          read_heading(); 
+  32   2          
+  33   2          if(done)
+  34   2           {
+  35   3             LCD_goto(6, 1); 
+  36   3             LCD_putchar(data_bytes[2]);
+  37   3             
+  38   3             LCD_goto(7, 1); 
+  39   3             LCD_putchar(data_bytes[3]);
+  40   3             
+  41   3             LCD_goto(8, 1); 
+  42   3             LCD_putchar(data_bytes[4]);
+  43   3             
+  44   3             LCD_goto(9, 1); 
+  45   3             LCD_putchar('.');
+  46   3             LCD_goto(10, 1); 
+  47   3             LCD_putchar(data_bytes[6]);
+  48   3             
+  49   3             done = 0;
+  50   3           }
+  51   2           
+  52   2           P15 = ~P15;
+  53   2           delay_ms(200);
+C51 COMPILER V9.56.0.0   MAIN                                                              07/25/2018 15:43:54 PAGE 2   
+
+  54   2        };
+  55   1      }
+  56          
+  57          
+  58          void setup(void)
+  59          { 
+  60   1        P15_PushPull_Mode;
+  61   1        
+  62   1        LCD_init();
+  63   1        LCD_clear_home(); 
+  64   1        lcd_symbol();
+  65   1        LCD_goto(3, 0); 
+  66   1        LCD_putstr("Heading  N");
+  67   1        LCD_goto(11, 0); 
+  68   1        LCD_send(0, DAT);
+  69   1        
+  70   1        InitialUART1_Timer3(9600);
+  71   1      }
+  72          
+  73          
+  74          void lcd_symbol(void)  
+  75          {
+  76   1        unsigned char s = 0;  
+  77   1      
+  78   1        LCD_send(0x40, CMD);
+  79   1      
+  80   1        for(s = 0; s < 8; s++)
+  81   1        {
+  82   2         LCD_send(symbol[s], DAT);
+  83   2        }
+  84   1      
+  85   1        LCD_send(0x80, CMD);
+  86   1      } 
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    180    ----
+   CONSTANT SIZE    =     11    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      8       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,1 @@
+"..\..\My_Libraries\LCD (Software Delay)\LCD.c" OPTIMIZE (8,SPEED) BROWSE INCDIR(..\..\Include;..\..\My_Libraries\2 Wire LCD  (Software Delay);..\..\My_Libraries\DHT11;..\..\My_Libraries\Software Delay) DEFINE (FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\Listings\LCD.lst) TABS (2) OBJECT(.\Objects\LCD.obj)

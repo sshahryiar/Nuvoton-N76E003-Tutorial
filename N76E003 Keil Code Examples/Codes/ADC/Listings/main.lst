@@ -1,0 +1,115 @@
+C51 COMPILER V9.56.0.0   MAIN                                                              07/25/2018 13:14:15 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\..\Include;..\..\My_Libraries\
+                    -3 Wire LCD) DEFINE(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\Listings\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "N76E003.h"
+   2          #include "SFR_Macro.h"
+   3          #include "Function_define.h"
+   4          #include "Common.h"
+   5          #include "Delay.h"
+   6          #include "LCD_3_Wire.h"
+   7          
+   8          
+   9          #define scalar          0.12412
+  10          
+  11          
+  12          void setup(void);
+  13          unsigned int ADC_read(void);
+  14          void lcd_print_i(unsigned char x_pos, unsigned char y_pos, unsigned int value);
+  15          void lcd_print_f(unsigned char x_pos, unsigned char y_pos, unsigned int value);
+  16          
+  17          
+  18          void main(void)
+  19          {
+  20   1        unsigned int temp = 0;
+  21   1        unsigned int adc_count = 0;
+  22   1        
+  23   1        setup();
+  24   1        
+  25   1        while(1)
+  26   1        {
+  27   2          adc_count = ADC_read();
+  28   2          temp = ((unsigned int)(((float)adc_count) / scalar));
+  29   2          lcd_print_i(12, 0, adc_count);
+  30   2          lcd_print_f(11, 1, temp);
+  31   2          Timer0_Delay1ms(600);
+  32   2        }
+  33   1      }
+  34          
+  35          
+  36          void setup(void)
+  37          { 
+  38   1        LCD_init();
+  39   1        LCD_clear_home(); 
+  40   1        LCD_goto(0, 0); 
+  41   1        LCD_putstr("ADC Count:");
+  42   1        LCD_goto(0, 1); 
+  43   1        LCD_putstr("Tmp/deg C:");
+  44   1        
+  45   1        Enable_ADC_AIN0;
+  46   1      }
+  47          
+  48          
+  49          unsigned int ADC_read(void)
+  50          {
+  51   1        register unsigned int value = 0x0000;
+  52   1        
+  53   1        clr_ADCF;
+  54   1        set_ADCS;                 
+C51 COMPILER V9.56.0.0   MAIN                                                              07/25/2018 13:14:15 PAGE 2   
+
+  55   1        while(ADCF == 0);
+  56   1        
+  57   1        value = ADCRH;
+  58   1        value <<= 4;
+  59   1        value |= ADCRL;
+  60   1        
+  61   1        return value;
+  62   1      }
+  63          
+  64          
+  65          void lcd_print_i(unsigned char x_pos, unsigned char y_pos, unsigned int value)
+  66          {  
+  67   1        LCD_goto(x_pos, y_pos);
+  68   1        LCD_putchar((value / 1000) + 0x30);
+  69   1        LCD_goto((x_pos + 1), y_pos);
+  70   1        LCD_putchar(((value % 1000) / 100) + 0x30);  
+  71   1        LCD_goto((x_pos + 2), y_pos);
+  72   1        LCD_putchar(((value % 100) / 10) + 0x30);
+  73   1        LCD_goto((x_pos + 3), y_pos);
+  74   1        LCD_putchar((value % 10) + 0x30);
+  75   1      }
+  76          
+  77          void lcd_print_f(unsigned char x_pos, unsigned char y_pos, unsigned int value)
+  78          {  
+  79   1        LCD_goto(x_pos, y_pos);
+  80   1        LCD_putchar((value / 1000) + 0x30);
+  81   1        LCD_goto((x_pos + 1), y_pos);
+  82   1        LCD_putchar(((value % 1000) / 100) + 0x30);  
+  83   1        LCD_goto((x_pos + 2), y_pos);
+  84   1        LCD_putchar('.');
+  85   1        LCD_goto((x_pos + 3), y_pos);
+  86   1        LCD_putchar(((value % 100) / 10) + 0x30);
+  87   1        LCD_goto((x_pos + 4), y_pos);
+  88   1        LCD_putchar((value % 10) + 0x30);
+  89   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    461    ----
+   CONSTANT SIZE    =     22    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      12
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

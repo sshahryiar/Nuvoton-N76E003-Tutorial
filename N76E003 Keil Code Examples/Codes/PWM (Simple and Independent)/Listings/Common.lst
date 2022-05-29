@@ -1,0 +1,432 @@
+C51 COMPILER V9.56.0.0   COMMON                                                            07/25/2018 15:18:18 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE COMMON
+OBJECT MODULE PLACED IN .\Objects\Common.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\Common\Common.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\..\Include;..\.
+                    -.\My_Libraries\Software Delay) DEFINE(FOSC_160000) DEBUG OBJECTEXTEND CODE PRINT(.\Listings\Common.lst) TABS(2) PREPRINT
+                    -(.\Listings\Common.i) OBJECT(.\Objects\Common.obj)
+
+line level    source
+
+   1          /*--------------------------------------------------------------------------------------------------------
+             --*/
+   2          /*                                                                                                        
+             - */
+   3          /* Copyright(c) 2016 Nuvoton Technology Corp. All rights reserved.                                        
+             - */
+   4          /*                                                                                                        
+             - */
+   5          /*--------------------------------------------------------------------------------------------------------
+             --*/
+   6          
+   7          //********************************************************************************************************
+             -***
+   8          //  Nuvoton Technoledge Corp. 
+   9          //  Website: http://www.nuvoton.com
+  10          //  E-Mail : MicroC-8bit@nuvoton.com
+  11          //  Date   : Apr/21/2016
+  12          //********************************************************************************************************
+             -***
+  13          
+  14          #include "N76E003.h"
+  15          #include "Common.h"
+  16          #include "Delay.h"
+  17          #include "SFR_Macro.h"
+  18          #include "Function_define.h"
+  19          
+  20          //----------------------------------------------------------------------------------
+  21          // UART0 baud rate initial setting 
+  22          //----------------------------------------------------------------------------------
+  23          void InitialUART0_Timer1(UINT32 u32Baudrate)    //T1M = 1, SMOD = 1
+  24          {
+  25   1          P06_Quasi_Mode;   //Setting UART pin as Quasi mode for transmit
+  26   1          P07_Quasi_Mode;   //Setting UART pin as Quasi mode for transmit
+  27   1        
+  28   1          SCON = 0x50;      //UART0 Mode1,REN=1,TI=1
+  29   1          TMOD |= 0x20;     //Timer1 Mode1
+  30   1          
+  31   1          set_SMOD;         //UART0 Double Rate Enable
+  32   1          set_T1M;
+  33   1          clr_BRCK;         //Serial port 0 baud rate clock source = Timer1
+  34   1       
+  35   1      #ifdef FOSC_160000
+  36   1          TH1 = 256 - (1000000/u32Baudrate+1);               /*16 MHz */
+  37   1      #endif      
+  38   1      #ifdef FOSC_166000
+                  TH1 = 256 - (1037500/u32Baudrate);                 /*16.6 MHz */
+              #endif
+  41   1          set_TR1;
+  42   1          set_TI;           //For printf function must setting TI = 1
+  43   1      }
+  44          //---------------------------------------------------------------
+  45          void InitialUART0_Timer3(UINT32 u32Baudrate) //use timer3 as Baudrate generator
+  46          {
+C51 COMPILER V9.56.0.0   COMMON                                                            07/25/2018 15:18:18 PAGE 2   
+
+  47   1          P06_Quasi_Mode;   //Setting UART pin as Quasi mode for transmit
+  48   1          P07_Quasi_Mode;   //Setting UART pin as Quasi mode for transmit 
+  49   1        
+  50   1          SCON = 0x50;     //UART0 Mode1,REN=1,TI=1
+  51   1          set_SMOD;        //UART0 Double Rate Enable
+  52   1          T3CON &= 0xF8;   //T3PS2=0,T3PS1=0,T3PS0=0(Prescale=1)
+  53   1          set_BRCK;        //UART0 baud rate clock source = Timer3
+  54   1      
+  55   1      #ifdef FOSC_160000
+  56   1          RH3    = HIBYTE(65536 - (1000000/u32Baudrate)-1);     /*16 MHz */
+  57   1          RL3    = LOBYTE(65536 - (1000000/u32Baudrate)-1);     /*16 MHz */
+  58   1      #endif
+  59   1      #ifdef FOSC_166000
+                  RH3    = HIBYTE(65536 - (1037500/u32Baudrate));       /*16.6 MHz */
+                  RL3    = LOBYTE(65536 - (1037500/u32Baudrate));       /*16.6 MHz */
+              #endif
+  63   1          set_TR3;         //Trigger Timer3
+  64   1          set_TI;          //For printf function must setting TI = 1
+  65   1      }
+  66          
+  67          UINT8 Receive_Data_From_UART0(void)
+  68          {
+  69   1          UINT8 c;
+  70   1          while (!RI);
+  71   1          c = SBUF;
+  72   1          RI = 0;
+  73   1          return (c);
+  74   1      }
+  75          
+  76          void Send_Data_To_UART0 (UINT8 c)
+  77          {
+  78   1          TI = 0;
+  79   1          SBUF = c;
+  80   1          while(TI==0);
+  81   1      }
+  82          
+  83          
+  84          //----------------------------------------------------------------------------------
+  85          // UART1 baud rate initial setting 
+  86          //----------------------------------------------------------------------------------
+  87          void InitialUART1_Timer3(UINT32 u32Baudrate) //use timer3 as Baudrate generator
+  88          {
+  89   1          P02_Quasi_Mode;   //Setting UART pin as Quasi mode for transmit
+  90   1          P16_Quasi_Mode;   //Setting UART pin as Quasi mode for transmit
+  91   1        
+  92   1          SCON_1 = 0x50;    //UART1 Mode1,REN_1=1,TI_1=1
+  93   1          T3CON = 0x08;     //T3PS2=0,T3PS1=0,T3PS0=0(Prescale=1), UART1 in MODE 1
+  94   1          clr_BRCK;
+  95   1        
+  96   1      #ifdef FOSC_160000
+  97   1          RH3    = HIBYTE(65536 - (1000000/u32Baudrate)-1);     /*16 MHz */
+  98   1          RL3    = LOBYTE(65536 - (1000000/u32Baudrate)-1);     /*16 MHz */
+  99   1      #endif
+ 100   1      #ifdef FOSC_166000
+                  RH3    = HIBYTE(65536 - (1037500/u32Baudrate));       /*16.6 MHz */
+                  RL3    = LOBYTE(65536 - (1037500/u32Baudrate));       /*16.6 MHz */
+              #endif
+ 104   1          set_TR3;         //Trigger Timer3
+ 105   1      }
+ 106          
+ 107          UINT8 Receive_Data_From_UART1(void)
+ 108          {
+C51 COMPILER V9.56.0.0   COMMON                                                            07/25/2018 15:18:18 PAGE 3   
+
+ 109   1          UINT8 c;
+ 110   1          
+ 111   1          while (!RI_1);
+ 112   1          c = SBUF_1;
+ 113   1          RI_1 = 0;
+ 114   1          return (c);
+ 115   1      }
+ 116          
+ 117          void Send_Data_To_UART1 (UINT8 c)
+ 118          {
+ 119   1          TI_1 = 0;
+ 120   1          SBUF_1 = c;
+ 121   1          while(TI_1==0);
+ 122   1      }
+ 123          
+ 124          
+ 125          /*==========================================================================*/
+ 126          #ifdef SW_Reset
+              void SW_Reset(void)
+              {
+                  TA = 0xAA;
+                  TA = 0x55;
+                  set_SWRST;
+              }
+              #endif
+ 134          /*==========================================================================*/
+C51 COMPILER V9.56.0.0   COMMON                                                            07/25/2018 15:18:18 PAGE 4   
+
+ASSEMBLY LISTING OF GENERATED OBJECT CODE
+
+
+             ; FUNCTION _InitialUART0_Timer1 (BEGIN)
+                                           ; SOURCE LINE # 23
+;---- Variable 'u32Baudrate' assigned to Register 'R4/R5/R6/R7' ----
+                                           ; SOURCE LINE # 24
+                                           ; SOURCE LINE # 25
+0000 53B1BF            ANL     P0M1,#0BFH
+0003 53B2BF            ANL     P0M2,#0BFH
+                                           ; SOURCE LINE # 26
+0006 53B17F            ANL     P0M1,#07FH
+0009 53B27F            ANL     P0M2,#07FH
+                                           ; SOURCE LINE # 28
+000C 759850            MOV     SCON,#050H
+                                           ; SOURCE LINE # 29
+000F 438920            ORL     TMOD,#020H
+                                           ; SOURCE LINE # 31
+0012 438780            ORL     PCON,#080H
+                                           ; SOURCE LINE # 32
+0015 438E10            ORL     CKCON,#010H
+                                           ; SOURCE LINE # 33
+0018 53C4DF            ANL     T3CON,#0DFH
+                                           ; SOURCE LINE # 36
+001B AB07              MOV     R3,AR7
+001D AA06              MOV     R2,AR6
+001F A905              MOV     R1,AR5
+0021 A804              MOV     R0,AR4
+0023 7F40              MOV     R7,#040H
+0025 7E42              MOV     R6,#042H
+0027 7D0F              MOV     R5,#0FH
+0029 7C00              MOV     R4,#00H
+002B 120000      E     LCALL   ?C?ULDIV
+002E EF                MOV     A,R7
+002F 04                INC     A
+0030 F4                CPL     A
+0031 04                INC     A
+0032 F58D              MOV     TH1,A
+                                           ; SOURCE LINE # 41
+0034 D28E              SETB    TR1
+                                           ; SOURCE LINE # 42
+0036 D299              SETB    TI
+                                           ; SOURCE LINE # 43
+0038 22                RET     
+             ; FUNCTION _InitialUART0_Timer1 (END)
+
+             ; FUNCTION _InitialUART0_Timer3 (BEGIN)
+                                           ; SOURCE LINE # 45
+0000 8F00        R     MOV     u32Baudrate+03H,R7
+0002 8E00        R     MOV     u32Baudrate+02H,R6
+0004 8D00        R     MOV     u32Baudrate+01H,R5
+0006 8C00        R     MOV     u32Baudrate,R4
+                                           ; SOURCE LINE # 46
+                                           ; SOURCE LINE # 47
+0008 53B1BF            ANL     P0M1,#0BFH
+000B 53B2BF            ANL     P0M2,#0BFH
+                                           ; SOURCE LINE # 48
+000E 53B17F            ANL     P0M1,#07FH
+0011 53B27F            ANL     P0M2,#07FH
+                                           ; SOURCE LINE # 50
+0014 759850            MOV     SCON,#050H
+                                           ; SOURCE LINE # 51
+C51 COMPILER V9.56.0.0   COMMON                                                            07/25/2018 15:18:18 PAGE 5   
+
+0017 438780            ORL     PCON,#080H
+                                           ; SOURCE LINE # 52
+001A 53C4F8            ANL     T3CON,#0F8H
+                                           ; SOURCE LINE # 53
+001D 43C420            ORL     T3CON,#020H
+                                           ; SOURCE LINE # 56
+0020 AB00        R     MOV     R3,u32Baudrate+03H
+0022 AA00        R     MOV     R2,u32Baudrate+02H
+0024 A900        R     MOV     R1,u32Baudrate+01H
+0026 A800        R     MOV     R0,u32Baudrate
+0028 7F40              MOV     R7,#040H
+002A 7E42              MOV     R6,#042H
+002C 7D0F              MOV     R5,#0FH
+002E 7C00              MOV     R4,#00H
+0030 120000      E     LCALL   ?C?ULDIV
+0033 C3                CLR     C
+0034 74FF              MOV     A,#0FFH
+0036 9F                SUBB    A,R7
+0037 FF                MOV     R7,A
+0038 74FF              MOV     A,#0FFH
+003A 9E                SUBB    A,R6
+003B FE                MOV     R6,A
+003C E4                CLR     A
+003D 9D                SUBB    A,R5
+003E FD                MOV     R5,A
+003F E4                CLR     A
+0040 9C                SUBB    A,R4
+0041 FC                MOV     R4,A
+0042 7808              MOV     R0,#08H
+0044 120000      E     LCALL   ?C?ULSHR
+0047 8FC6              MOV     RH3,R7
+                                           ; SOURCE LINE # 57
+0049 AB00        R     MOV     R3,u32Baudrate+03H
+004B AA00        R     MOV     R2,u32Baudrate+02H
+004D A900        R     MOV     R1,u32Baudrate+01H
+004F A800        R     MOV     R0,u32Baudrate
+0051 7F40              MOV     R7,#040H
+0053 7E42              MOV     R6,#042H
+0055 7D0F              MOV     R5,#0FH
+0057 7C00              MOV     R4,#00H
+0059 120000      E     LCALL   ?C?ULDIV
+005C C3                CLR     C
+005D 74FF              MOV     A,#0FFH
+005F 9F                SUBB    A,R7
+0060 FF                MOV     R7,A
+0061 8FC5              MOV     RL3,R7
+                                           ; SOURCE LINE # 63
+0063 43C408            ORL     T3CON,#08H
+                                           ; SOURCE LINE # 64
+0066 D299              SETB    TI
+                                           ; SOURCE LINE # 65
+0068 22                RET     
+             ; FUNCTION _InitialUART0_Timer3 (END)
+
+             ; FUNCTION Receive_Data_From_UART0 (BEGIN)
+                                           ; SOURCE LINE # 67
+                                           ; SOURCE LINE # 68
+0000         ?C0003:
+                                           ; SOURCE LINE # 70
+0000 3098FD            JNB     RI,?C0003
+0003         ?C0004:
+                                           ; SOURCE LINE # 71
+C51 COMPILER V9.56.0.0   COMMON                                                            07/25/2018 15:18:18 PAGE 6   
+
+;---- Variable 'c' assigned to Register 'R7' ----
+0003 AF99              MOV     R7,SBUF
+                                           ; SOURCE LINE # 72
+0005 C298              CLR     RI
+                                           ; SOURCE LINE # 73
+                                           ; SOURCE LINE # 74
+0007         ?C0005:
+0007 22                RET     
+             ; FUNCTION Receive_Data_From_UART0 (END)
+
+             ; FUNCTION _Send_Data_To_UART0 (BEGIN)
+                                           ; SOURCE LINE # 76
+;---- Variable 'c' assigned to Register 'R7' ----
+                                           ; SOURCE LINE # 77
+                                           ; SOURCE LINE # 78
+0000 C299              CLR     TI
+                                           ; SOURCE LINE # 79
+0002 8F99              MOV     SBUF,R7
+0004         ?C0006:
+                                           ; SOURCE LINE # 80
+0004 3099FD            JNB     TI,?C0006
+0007         ?C0007:
+                                           ; SOURCE LINE # 81
+0007         ?C0008:
+0007 22                RET     
+             ; FUNCTION _Send_Data_To_UART0 (END)
+
+             ; FUNCTION _InitialUART1_Timer3 (BEGIN)
+                                           ; SOURCE LINE # 87
+0000 8F00        R     MOV     u32Baudrate+03H,R7
+0002 8E00        R     MOV     u32Baudrate+02H,R6
+0004 8D00        R     MOV     u32Baudrate+01H,R5
+0006 8C00        R     MOV     u32Baudrate,R4
+                                           ; SOURCE LINE # 88
+                                           ; SOURCE LINE # 89
+0008 53B1FB            ANL     P0M1,#0FBH
+000B 53B2FB            ANL     P0M2,#0FBH
+                                           ; SOURCE LINE # 90
+000E 53B3BF            ANL     P1M1,#0BFH
+0011 53B4BF            ANL     P1M2,#0BFH
+                                           ; SOURCE LINE # 92
+0014 75F850            MOV     SCON_1,#050H
+                                           ; SOURCE LINE # 93
+0017 75C408            MOV     T3CON,#08H
+                                           ; SOURCE LINE # 94
+001A 53C4DF            ANL     T3CON,#0DFH
+                                           ; SOURCE LINE # 97
+001D AB00        R     MOV     R3,u32Baudrate+03H
+001F AA00        R     MOV     R2,u32Baudrate+02H
+0021 A900        R     MOV     R1,u32Baudrate+01H
+0023 A800        R     MOV     R0,u32Baudrate
+0025 7F40              MOV     R7,#040H
+0027 7E42              MOV     R6,#042H
+0029 7D0F              MOV     R5,#0FH
+002B 7C00              MOV     R4,#00H
+002D 120000      E     LCALL   ?C?ULDIV
+0030 C3                CLR     C
+0031 74FF              MOV     A,#0FFH
+0033 9F                SUBB    A,R7
+0034 FF                MOV     R7,A
+0035 74FF              MOV     A,#0FFH
+0037 9E                SUBB    A,R6
+C51 COMPILER V9.56.0.0   COMMON                                                            07/25/2018 15:18:18 PAGE 7   
+
+0038 FE                MOV     R6,A
+0039 E4                CLR     A
+003A 9D                SUBB    A,R5
+003B FD                MOV     R5,A
+003C E4                CLR     A
+003D 9C                SUBB    A,R4
+003E FC                MOV     R4,A
+003F 7808              MOV     R0,#08H
+0041 120000      E     LCALL   ?C?ULSHR
+0044 8FC6              MOV     RH3,R7
+                                           ; SOURCE LINE # 98
+0046 AB00        R     MOV     R3,u32Baudrate+03H
+0048 AA00        R     MOV     R2,u32Baudrate+02H
+004A A900        R     MOV     R1,u32Baudrate+01H
+004C A800        R     MOV     R0,u32Baudrate
+004E 7F40              MOV     R7,#040H
+0050 7E42              MOV     R6,#042H
+0052 7D0F              MOV     R5,#0FH
+0054 7C00              MOV     R4,#00H
+0056 120000      E     LCALL   ?C?ULDIV
+0059 C3                CLR     C
+005A 74FF              MOV     A,#0FFH
+005C 9F                SUBB    A,R7
+005D FF                MOV     R7,A
+005E 8FC5              MOV     RL3,R7
+                                           ; SOURCE LINE # 104
+0060 43C408            ORL     T3CON,#08H
+                                           ; SOURCE LINE # 105
+0063 22                RET     
+             ; FUNCTION _InitialUART1_Timer3 (END)
+
+             ; FUNCTION Receive_Data_From_UART1 (BEGIN)
+                                           ; SOURCE LINE # 107
+                                           ; SOURCE LINE # 108
+0000         ?C0010:
+                                           ; SOURCE LINE # 111
+0000 30F8FD            JNB     RI_1,?C0010
+0003         ?C0011:
+                                           ; SOURCE LINE # 112
+;---- Variable 'c' assigned to Register 'R7' ----
+0003 AF9A              MOV     R7,SBUF_1
+                                           ; SOURCE LINE # 113
+0005 C2F8              CLR     RI_1
+                                           ; SOURCE LINE # 114
+                                           ; SOURCE LINE # 115
+0007         ?C0012:
+0007 22                RET     
+             ; FUNCTION Receive_Data_From_UART1 (END)
+
+             ; FUNCTION _Send_Data_To_UART1 (BEGIN)
+                                           ; SOURCE LINE # 117
+;---- Variable 'c' assigned to Register 'R7' ----
+                                           ; SOURCE LINE # 118
+                                           ; SOURCE LINE # 119
+0000 C2F9              CLR     TI_1
+                                           ; SOURCE LINE # 120
+0002 8F9A              MOV     SBUF_1,R7
+0004         ?C0013:
+                                           ; SOURCE LINE # 121
+0004 30F9FD            JNB     TI_1,?C0013
+0007         ?C0014:
+                                           ; SOURCE LINE # 122
+C51 COMPILER V9.56.0.0   COMMON                                                            07/25/2018 15:18:18 PAGE 8   
+
+0007         ?C0015:
+0007 22                RET     
+             ; FUNCTION _Send_Data_To_UART1 (END)
+
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    294    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       8
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

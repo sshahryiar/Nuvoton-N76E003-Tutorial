@@ -1,0 +1,198 @@
+C51 COMPILER V9.56.0.0   SW_I2C                                                            07/25/2018 14:16:51 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE SW_I2C
+OBJECT MODULE PLACED IN .\Objects\SW_I2C.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\My_Libraries\2 Wire LCD  (Software Delay)\SW_I2C.c OPTIMIZE(8,SPEE
+                    -D) BROWSE INCDIR(..\..\Include;..\..\My_Libraries\2 Wire LCD  (Software Delay);..\..\My_Libraries\Software Delay) DEFINE
+                    -(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\Listings\SW_I2C.lst) TABS(2) OBJECT(.\Objects\SW_I2C.obj)
+
+line level    source
+
+   1          #include "N76E003.h"
+   2          #include "SFR_Macro.h"
+   3          #include "Function_define.h"
+   4          #include "Common.h"
+   5          #include "Delay.h"
+   6          #include "soft_delay.h"
+   7          #include "SW_I2C.h"
+   8          
+   9          
+  10          void SW_I2C_init(void)
+  11          {
+  12   1          SDA_DIR_OUT();
+  13   1          SCL_DIR_OUT();
+  14   1          delay_ms(10);
+  15   1          SDA_HIGH();
+  16   1          SCL_HIGH();
+  17   1      }
+  18          
+  19          
+  20          void SW_I2C_start(void)
+  21          {
+  22   1          SDA_DIR_OUT();
+  23   1          SDA_HIGH();
+  24   1          SCL_HIGH();
+  25   1          delay_us(40);
+  26   1          SDA_LOW();
+  27   1          delay_us(40);
+  28   1          SCL_LOW();
+  29   1      }
+  30          
+  31          
+  32          void SW_I2C_stop(void)
+  33          {
+  34   1          SDA_DIR_OUT();
+  35   1          SDA_LOW();
+  36   1          SCL_LOW();
+  37   1          delay_us(40);
+  38   1          SDA_HIGH();
+  39   1          SCL_HIGH();
+  40   1          delay_us(40);
+  41   1      }
+  42          
+  43          
+  44          unsigned char SW_I2C_read(unsigned char ack)
+  45          {
+  46   1          unsigned char i = 8;
+  47   1          unsigned char j = 0;
+  48   1      
+  49   1          SDA_DIR_IN();
+  50   1      
+  51   1          while(i > 0)
+  52   1          {
+  53   2              SCL_LOW();
+C51 COMPILER V9.56.0.0   SW_I2C                                                            07/25/2018 14:16:51 PAGE 2   
+
+  54   2              delay_us(20);
+  55   2              SCL_HIGH();
+  56   2              delay_us(20);
+  57   2              j <<= 1;
+  58   2      
+  59   2              if(SDA_IN() != 0x00)
+  60   2              {
+  61   3                  j++;
+  62   3              }
+  63   2      
+  64   2              delay_us(10);
+  65   2              i--;
+  66   2          };
+  67   1      
+  68   1          switch(ack)
+  69   1          {
+  70   2              case I2C_ACK:
+  71   2              {
+  72   3                  SW_I2C_ACK_NACK(I2C_ACK);;
+  73   3                  break;
+  74   3              }
+  75   2              default:
+  76   2              {
+  77   3                  SW_I2C_ACK_NACK(I2C_NACK);;
+  78   3                  break;
+  79   3              }
+  80   2          }
+  81   1      
+  82   1          return j;
+  83   1      }
+  84          
+  85          
+  86          void SW_I2C_write(unsigned char value)
+  87          {
+  88   1          unsigned char i = 8;
+  89   1      
+  90   1          SDA_DIR_OUT();
+  91   1          SCL_LOW();
+  92   1      
+  93   1          while(i > 0)
+  94   1          {
+  95   2      
+  96   2              if(((value & 0x80) >> 7) != 0x00)
+  97   2              {
+  98   3                  SDA_HIGH();
+  99   3              }
+ 100   2              else
+ 101   2              {
+ 102   3                  SDA_LOW();
+ 103   3              }
+ 104   2      
+ 105   2      
+ 106   2              value <<= 1;
+ 107   2              delay_us(20);
+ 108   2              SCL_HIGH();
+ 109   2              delay_us(20);
+ 110   2              SCL_LOW();
+ 111   2              delay_us(20);
+ 112   2              i--;
+ 113   2          };
+ 114   1      }
+ 115          
+C51 COMPILER V9.56.0.0   SW_I2C                                                            07/25/2018 14:16:51 PAGE 3   
+
+ 116          
+ 117          void SW_I2C_ACK_NACK(unsigned char mode)
+ 118          {
+ 119   1          SCL_LOW();
+ 120   1          SDA_DIR_OUT();
+ 121   1      
+ 122   1          switch(mode)
+ 123   1          {
+ 124   2              case I2C_ACK:
+ 125   2              {
+ 126   3                  SDA_LOW();
+ 127   3                  break;
+ 128   3              }
+ 129   2              default:
+ 130   2              {
+ 131   3                  SDA_HIGH();
+ 132   3                  break;
+ 133   3              }
+ 134   2          }
+ 135   1      
+ 136   1          delay_us(20);
+ 137   1          SCL_HIGH();
+ 138   1          delay_us(20);
+ 139   1          SCL_LOW();
+ 140   1      }
+ 141          
+ 142          
+ 143          unsigned char SW_I2C_wait_ACK(void)
+ 144          {
+ 145   1          signed int timeout = 0;
+ 146   1      
+ 147   1          SDA_DIR_IN();
+ 148   1      
+ 149   1          SDA_HIGH();
+ 150   1          delay_us(10);
+ 151   1          SCL_HIGH();
+ 152   1          delay_us(10);
+ 153   1      
+ 154   1          while(SDA_IN() != 0x00)
+ 155   1          {
+ 156   2              timeout++;
+ 157   2      
+ 158   2              if(timeout > I2C_timeout)
+ 159   2              {
+ 160   3                  SW_I2C_stop();
+ 161   3                  return 1;
+ 162   3              }
+ 163   2          };
+ 164   1      
+ 165   1          SCL_LOW();
+ 166   1          return 0;
+ 167   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    327    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       7
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+C51 COMPILER V9.56.0.0   SW_I2C                                                            07/25/2018 14:16:51 PAGE 4   
+
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

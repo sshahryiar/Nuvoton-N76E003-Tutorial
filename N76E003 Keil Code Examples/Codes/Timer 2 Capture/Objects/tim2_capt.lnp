@@ -1,0 +1,8 @@
+".\Objects\main.obj",
+".\Objects\Common.obj",
+".\Objects\Delay.obj",
+".\Objects\LCD_3_Wire.obj",
+".\Objects\STARTUP.obj" 
+TO ".\Objects\tim2_capt" 
+PRINT(".\Listings\tim2_capt.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 

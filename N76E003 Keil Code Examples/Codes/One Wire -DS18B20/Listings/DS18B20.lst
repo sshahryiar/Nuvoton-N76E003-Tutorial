@@ -1,0 +1,118 @@
+C51 COMPILER V9.56.0.0   DS18B20                                                           08/03/2018 12:36:37 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE DS18B20
+OBJECT MODULE PLACED IN .\Objects\DS18B20.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\My_Libraries\DS18B20\DS18B20.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\
+                    -..\Include;..\..\My_Libraries\Software Delay;..\..\My_Libraries\DS18B20;..\..\My_Libraries\3 Wire LCD (Software Delay)) 
+                    -DEFINE(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\Listings\DS18B20.lst) TABS(2) OBJECT(.\Objects\DS18B20.obj)
+
+line level    source
+
+   1          #include "N76E003.h"
+   2          #include "SFR_Macro.h"
+   3          #include "Function_define.h"
+   4          #include "Common.h"
+   5          #include "Delay.h"
+   6          #include "soft_delay.h"
+   7          #include "DS18B20.h"
+   8          
+   9          
+  10          void DS18B20_init(void)                             
+  11          {                                       
+  12   1        onewire_reset();
+  13   1        delay_ms(100);
+  14   1      }              
+  15          
+  16          
+  17          float DS18B20_get_temperature(void)
+  18          {                                               
+  19   1        unsigned char msb = 0x00;
+  20   1        unsigned char lsb = 0x00;
+  21   1        register float temp = 0.0;  
+  22   1                               
+  23   1        onewire_reset();     
+  24   1        onewire_write(skip_ROM);        
+  25   1        onewire_write(convert_T); 
+  26   1          
+  27   1        switch(resolution)   
+  28   1        {                                                  
+  29   2          case 12:
+  30   2          {                                          
+  31   3            delay_ms(750);
+  32   3            break;
+  33   3          }                
+  34   2          case 11:                                     
+  35   2          {              
+  36   3            delay_ms(375);
+  37   3            break;
+  38   3          }           
+  39   2          case 10:                             
+  40   2          {                                 
+  41   3            delay_ms(188);   
+  42   3            break;
+  43   3          }                                        
+  44   2          case 9:                                   
+  45   2          {                                                
+  46   3            delay_ms(94);                 
+  47   3            break;                            
+  48   3          }                        
+  49   2        }                  
+  50   1      
+  51   1        onewire_reset(); 
+  52   1      
+  53   1        onewire_write(skip_ROM);                 
+C51 COMPILER V9.56.0.0   DS18B20                                                           08/03/2018 12:36:37 PAGE 2   
+
+  54   1        onewire_write(read_scratchpad);
+  55   1      
+  56   1        lsb = onewire_read();
+  57   1        msb = onewire_read();
+  58   1      
+  59   1        temp = msb;                           
+  60   1        temp *= 256.0;
+  61   1        temp += lsb;
+  62   1          
+  63   1          
+  64   1        switch(resolution)   
+  65   1        {                                  
+  66   2          case 12:            
+  67   2          {                                                
+  68   3            temp *= 0.0625;                 
+  69   3            break;                            
+  70   3          }     
+  71   2          case 11: 
+  72   2          {         
+  73   3            temp *= 0.125;      
+  74   3            break;
+  75   3          }                
+  76   2          case 10:
+  77   2          {            
+  78   3            temp *= 0.25;     
+  79   3            break;
+  80   3          }  
+  81   2          case 9:                                 
+  82   2          {                                 
+  83   3            temp *= 0.5;      
+  84   3            break;      
+  85   3          }                          
+  86   2        }  
+  87   1          
+  88   1        delay_ms(40);     
+  89   1        
+  90   1        return (temp);       
+  91   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    284    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       6
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

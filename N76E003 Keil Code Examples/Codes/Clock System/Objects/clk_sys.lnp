@@ -1,0 +1,7 @@
+".\Objects\clk_sys.obj",
+".\Objects\Common.obj",
+".\Objects\Delay.obj",
+".\Objects\STARTUP.obj" 
+TO ".\Objects\clk_sys" 
+PRINT(".\Listings\clk_sys.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 

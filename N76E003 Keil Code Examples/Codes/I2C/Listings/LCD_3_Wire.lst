@@ -1,0 +1,190 @@
+C51 COMPILER V9.56.0.0   LCD_3_WIRE                                                        07/23/2018 21:48:50 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE LCD_3_WIRE
+OBJECT MODULE PLACED IN .\Objects\LCD_3_Wire.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\My_Libraries\3 Wire LCD (Software Delay)\LCD_3_Wire.c OPTIMIZE(8,S
+                    -PEED) BROWSE INCDIR(..\..\Include;..\..\My_Libraries\3 Wire LCD (Software Delay);..\..\My_Libraries\I2C;..\..\My_Librari
+                    -es\DS1307;..\..\My_Libraries\Software Delay) DEFINE(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\Listings\LCD_3_Wire.lst) TAB
+                    -S(2) OBJECT(.\Objects\LCD_3_Wire.obj)
+
+line level    source
+
+   1          #include "N76E003.h"
+   2          #include "SFR_Macro.h"
+   3          #include "Function_define.h"
+   4          #include "Common.h"
+   5          #include "soft_delay.h"
+   6          #include "LCD_3_Wire.h"
+   7          
+   8          
+   9          unsigned char data_value;
+  10          
+  11          
+  12          void SIPO(void)
+  13          {
+  14   1          unsigned char bit_value = 0x00;
+  15   1          unsigned char clk = 0x08;
+  16   1          unsigned char temp = 0x00;
+  17   1          
+  18   1          temp = data_value;
+  19   1          LCD_STB_LOW();
+  20   1          
+  21   1          while(clk > 0)
+  22   1          {
+  23   2              bit_value = ((temp & 0x80) >> 0x07);
+  24   2              bit_value &= 0x01;
+  25   2      
+  26   2              switch(bit_value)
+  27   2              {
+  28   3                  case 0:
+  29   3                  {
+  30   4                      LCD_SDO_LOW();
+  31   4                      break;
+  32   4                  }
+  33   3                  default:
+  34   3                  {
+  35   4                      LCD_SDO_HIGH();
+  36   4                      break;
+  37   4                  }
+  38   3              }
+  39   2      
+  40   2              LCD_SCK_HIGH();
+  41   2      
+  42   2              temp <<= 0x01;
+  43   2              clk--;
+  44   2      
+  45   2              LCD_SCK_LOW();
+  46   2          };
+  47   1      
+  48   1          LCD_STB_HIGH();
+  49   1      }
+  50          
+  51          
+  52          void LCD_init(void)
+C51 COMPILER V9.56.0.0   LCD_3_WIRE                                                        07/23/2018 21:48:50 PAGE 2   
+
+  53          {                                     
+  54   1          delay_ms(10);
+  55   1      
+  56   1          LCD_GPIO_init();
+  57   1      
+  58   1          delay_ms(10);
+  59   1      
+  60   1          data_value = 0x08;
+  61   1          SIPO();
+  62   1          delay_ms(10); 
+  63   1          
+  64   1          LCD_send(0x33, CMD);
+  65   1          LCD_send(0x32, CMD);
+  66   1      
+  67   1          LCD_send((_4_pin_interface | _2_row_display | _5x7_dots), CMD);         
+  68   1          LCD_send((display_on | cursor_off | blink_off), CMD);     
+  69   1          LCD_send((clear_display), CMD);         
+  70   1          LCD_send((cursor_direction_inc | display_no_shift), CMD);        
+  71   1      }   
+  72          
+  73          
+  74          void LCD_toggle_EN(void)
+  75          {
+  76   1          data_value |= 0x08;
+  77   1          SIPO();
+  78   1          delay_ms(1);
+  79   1          data_value &= 0xF7;
+  80   1          SIPO();
+  81   1          delay_ms(1);
+  82   1      }
+  83             
+  84          
+  85          void LCD_send(unsigned char value, unsigned char mode)
+  86          {                               
+  87   1          switch(mode)
+  88   1          {
+  89   2              case DAT:
+  90   2              {
+  91   3                  data_value |= 0x04;
+  92   3                  break;
+  93   3              }
+  94   2              default:
+  95   2              {
+  96   3                  data_value &= 0xFB;
+  97   3                  break;
+  98   3              }
+  99   2          }
+ 100   1          
+ 101   1          SIPO();
+ 102   1          LCD_4bit_send(value);
+ 103   1      }  
+ 104              
+ 105          
+ 106          void LCD_4bit_send(unsigned char lcd_data)       
+ 107          {
+ 108   1          unsigned char temp = 0x00;
+ 109   1          
+ 110   1          temp = (lcd_data & 0xF0);
+ 111   1          data_value &= 0x0F;
+ 112   1          data_value |= temp;
+ 113   1          SIPO();
+ 114   1          LCD_toggle_EN();
+C51 COMPILER V9.56.0.0   LCD_3_WIRE                                                        07/23/2018 21:48:50 PAGE 3   
+
+ 115   1      
+ 116   1          temp = (lcd_data & 0x0F);
+ 117   1          temp <<= 0x04;
+ 118   1          data_value &= 0x0F;
+ 119   1          data_value |= temp;
+ 120   1          SIPO();
+ 121   1          LCD_toggle_EN();
+ 122   1      }  
+ 123          
+ 124          
+ 125          void LCD_putstr(char *lcd_string)
+ 126          {
+ 127   1          while(*lcd_string != '\0')  
+ 128   1          {
+ 129   2              LCD_putchar(*lcd_string++);
+ 130   2          }
+ 131   1      }
+ 132          
+ 133          
+ 134          void LCD_putchar(char char_data)
+ 135          {
+ 136   1          if((char_data >= 0x20) && (char_data <= 0x7F))
+ 137   1          {
+ 138   2              LCD_send(char_data, DAT);
+ 139   2          }
+ 140   1      }
+ 141          
+ 142          
+ 143          void LCD_clear_home(void)
+ 144          {
+ 145   1          LCD_send(clear_display, CMD);
+ 146   1          LCD_send(goto_home, CMD);
+ 147   1      }
+ 148          
+ 149          
+ 150          void LCD_goto(unsigned char x_pos,unsigned char y_pos)
+ 151          {                                                   
+ 152   1          if(y_pos == 0)    
+ 153   1          {                              
+ 154   2              LCD_send((0x80 | x_pos), CMD);
+ 155   2          }
+ 156   1          else 
+ 157   1          {                                              
+ 158   2              LCD_send((0x80 | 0x40 | x_pos), CMD); 
+ 159   2          }
+ 160   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    307    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1       5
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

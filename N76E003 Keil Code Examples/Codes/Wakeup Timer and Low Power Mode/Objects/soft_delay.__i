@@ -1,0 +1,1 @@
+"..\..\My_Libraries\Software Delay\soft_delay.c" OPTIMIZE (8,SPEED) BROWSE INCDIR(..\..\Include;..\..\My_Libraries\Software Delay) DEFINE (FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\Listings\soft_delay.lst) TABS (2) OBJECT(.\Objects\soft_delay.obj)

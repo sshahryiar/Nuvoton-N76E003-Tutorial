@@ -1,0 +1,11 @@
+".\Objects\main.obj",
+".\Objects\Common.obj",
+".\Objects\Delay.obj",
+".\Objects\LCD_3_Wire.obj",
+".\Objects\DS1307.obj",
+".\Objects\I2C.obj",
+".\Objects\soft_delay.obj",
+".\Objects\STARTUP.obj" 
+TO ".\Objects\i2c" 
+PRINT(".\Listings\i2c.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 

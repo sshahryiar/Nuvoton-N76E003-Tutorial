@@ -1,0 +1,116 @@
+C51 COMPILER V9.56.0.0   HMC1022                                                           07/25/2018 15:43:54 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE HMC1022
+OBJECT MODULE PLACED IN .\Objects\HMC1022.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\My_Libraries\HMC1022\HMC1022.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\
+                    -..\Include;..\..\My_Libraries\2 Wire LCD  (Software Delay);..\..\My_Libraries\HMC1022;..\..\My_Libraries\Software Delay)
+                    - DEFINE(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\Listings\HMC1022.lst) TABS(2) OBJECT(.\Objects\HMC1022.obj)
+
+line level    source
+
+   1          #include "N76E003.h"
+   2          #include "SFR_Macro.h"
+   3          #include "Function_define.h"
+   4          #include "Common.h"
+   5          #include "Delay.h"
+   6          #include "soft_delay.h"
+   7          #include "HMC1022.h" 
+   8          
+   9          
+  10          unsigned char done = 0;
+  11          unsigned char data_bytes[no_of_data_bytes_returned] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00}; 
+  12                                                                    
+  13          
+  14          void read_heading(void)
+  15          {                         
+  16   1           unsigned char s = 0;  
+  17   1           unsigned long CRC = 0;
+  18   1                                                      
+  19   1           Send_Data_To_UART1(Get_Angular_Measurement);  
+  20   1                     
+  21   1           for(s = 0; s < no_of_data_bytes_returned; s++)
+  22   1           {                
+  23   2              data_bytes[s] = Receive_Data_From_UART1();
+  24   2              if(s < (no_of_data_bytes_returned - 1))   
+  25   2              {
+  26   3                  CRC += data_bytes[s];
+  27   3              }
+  28   2           }                                                       
+  29   1           
+  30   1           CRC = (CRC & 0xFF); 
+  31   1           
+  32   1           if(CRC == data_bytes[7])
+  33   1           {                                     
+  34   2             done = 1;
+  35   2           }     
+  36   1      } 
+  37          
+  38          
+  39          void calibrate_compass(void)
+  40          {
+  41   1       unsigned char s = 0x00;    
+  42   1      
+  43   1       Send_Data_To_UART1(Start_Calibration); 
+  44   1       
+  45   1       for(s = 0; s < 60; s++)
+  46   1       {
+  47   2           calibration_LED = 1;     
+  48   2           delay_ms(100);
+  49   2           calibration_LED = 0;
+  50   2           delay_ms(900);
+  51   2       }  
+  52   1       
+  53   1       for(s = 0; s < 60; s++)    
+C51 COMPILER V9.56.0.0   HMC1022                                                           07/25/2018 15:43:54 PAGE 2   
+
+  54   1       {
+  55   2           calibration_LED = 1;   
+  56   2           delay_ms(400);             
+  57   2           calibration_LED = 0;
+  58   2           delay_ms(600);
+  59   2       }              
+  60   1       
+  61   1       Send_Data_To_UART1(End_Calibration); 
+  62   1      }
+  63          
+  64          
+  65          void factory_reset(void)
+  66          {
+  67   1       Send_Data_To_UART1(0xA0); 
+  68   1       Send_Data_To_UART1(0xAA);
+  69   1       Send_Data_To_UART1(0xA5);  
+  70   1       Send_Data_To_UART1(0xC5); 
+  71   1      }      
+  72          
+  73          
+  74          void set_declination_angle(unsigned long angle)
+  75          { 
+  76   1       unsigned long hb = 0;
+  77   1       unsigned char lb = 0;
+  78   1       
+  79   1       lb = (angle & 0x00FF);    
+  80   1                                
+  81   1       hb = (angle & 0xFF00);
+  82   1       hb >>= 8;  
+  83   1                   
+  84   1       Send_Data_To_UART1(Set_Magnetic_Declination_High_Byte);    
+  85   1       Send_Data_To_UART1(hb);
+  86   1       
+  87   1       Send_Data_To_UART1(Set_Magnetic_Declination_Low_Byte);
+  88   1       Send_Data_To_UART1(lb);
+  89   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    277    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      9      15
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

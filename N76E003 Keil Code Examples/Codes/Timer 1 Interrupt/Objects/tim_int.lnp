@@ -1,0 +1,8 @@
+".\Objects\main.obj",
+".\Objects\Common.obj",
+".\Objects\Delay.obj",
+".\Objects\STARTUP.obj",
+".\Objects\LCD_3_Wire.obj" 
+TO ".\Objects\tim_int" 
+PRINT(".\Listings\tim_int.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 

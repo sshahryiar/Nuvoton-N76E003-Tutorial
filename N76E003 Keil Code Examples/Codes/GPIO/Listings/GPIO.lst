@@ -1,0 +1,58 @@
+C51 COMPILER V9.56.0.0   GPIO                                                              07/25/2018 12:48:32 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE GPIO
+OBJECT MODULE PLACED IN .\Objects\GPIO.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE GPIO.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\..\Include) DEFINE(FOSC_160000
+                    -) DEBUG OBJECTEXTEND PRINT(.\Listings\GPIO.lst) TABS(2) OBJECT(.\Objects\GPIO.obj)
+
+line level    source
+
+   1          #include "N76E003.h"
+   2          #include "SFR_Macro.h"
+   3          #include "Function_define.h"
+   4          #include "Common.h"
+   5          #include "Delay.h"
+   6          
+   7          
+   8          void setup(void);
+   9          
+  10          
+  11          void main(void)
+  12          { 
+  13   1        setup();
+  14   1        
+  15   1        while(1)
+  16   1        {
+  17   2          if(P05 != 0x00)
+  18   2          {
+  19   3            Timer0_Delay1ms(900);
+  20   3          }
+  21   2          
+  22   2          set_P15;
+  23   2          Timer0_Delay1ms(100);
+  24   2          clr_P15;
+  25   2          Timer0_Delay1ms(100);
+  26   2        };
+  27   1      }
+  28          
+  29          
+  30          void setup(void)
+  31          { 
+  32   1        P15_PushPull_Mode;
+  33   1        P05_Input_Mode;
+  34   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     58    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

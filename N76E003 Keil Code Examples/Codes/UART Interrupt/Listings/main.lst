@@ -1,0 +1,111 @@
+C51 COMPILER V9.56.0.0   MAIN                                                              07/13/2018 23:05:38 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\..\Include;..\..\My_Libraries\
+                    -Software Delay;..\..\My_Libraries\2 Wire LCD  (Software Delay)) DEFINE(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\Listings\
+                    -main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "N76E003.h"
+   2          #include "SFR_Macro.h"
+   3          #include "Function_define.h"
+   4          #include "Common.h"
+   5          #include "soft_delay.h"
+   6          #include "LCD_2_Wire.h"
+   7          
+   8          
+   9          unsigned char received = 0;
+  10          unsigned char count = 0;
+  11          unsigned char buffer[5] = {0x00, 0x00, 0x00, 0x00, 0x00};
+  12          
+  13          
+  14          void setup(void);
+  15          
+  16          
+  17          void UART0_ISR(void)     
+  18          interrupt 4 
+  19          {
+  20   1        if(RI == 1) 
+  21   1        {                                                                
+  22   2          buffer[count] = SBUF;
+  23   2          count++;
+  24   2          
+  25   2          if(count >= 4)
+  26   2          {
+  27   3            clr_ES;
+  28   3            received = 1;
+  29   3          }
+  30   2          
+  31   2          clr_RI; 
+  32   2        }
+  33   1        
+  34   1        P15 = ~P15;
+  35   1      }
+  36          
+  37          
+  38          void main(void)
+  39          {
+  40   1        unsigned char i = 0;
+  41   1        
+  42   1        setup();
+  43   1        
+  44   1        while(1)
+  45   1        {
+  46   2          Send_Data_To_UART0('S');
+  47   2          delay_ms(40);
+  48   2          set_ES;   
+  49   2          
+  50   2          if(received)
+  51   2          {
+  52   3            
+  53   3            for(i = 1; i < 4; i++)
+C51 COMPILER V9.56.0.0   MAIN                                                              07/13/2018 23:05:38 PAGE 2   
+
+  54   3            {
+  55   4              LCD_goto((12 + i), 1);
+  56   4              LCD_putchar(buffer[i]);
+  57   4            }
+  58   3            
+  59   3            count = 0;
+  60   3            received  = 0;
+  61   3            set_ES;
+  62   3          }
+  63   2          
+  64   2          delay_ms(40);
+  65   2        }
+  66   1      }
+  67          
+  68          
+  69          void setup(void)
+  70          {
+  71   1        P15_PushPull_Mode;
+  72   1        
+  73   1        LCD_init();
+  74   1        LCD_clear_home();
+  75   1        
+  76   1        LCD_goto(1, 0);
+  77   1        LCD_putstr("UART Interrupt");
+  78   1        LCD_goto(0, 1);
+  79   1        LCD_putstr("Range/Inch:");
+  80   1        
+  81   1        InitialUART0_Timer3(9600);
+  82   1        set_EA;
+  83   1      }
+  84          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    174    ----
+   CONSTANT SIZE    =     27    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      7       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

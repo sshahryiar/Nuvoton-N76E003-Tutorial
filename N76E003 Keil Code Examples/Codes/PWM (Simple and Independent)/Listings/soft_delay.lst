@@ -1,0 +1,120 @@
+C51 COMPILER V9.56.0.0   SOFT_DELAY                                                        07/25/2018 15:18:19 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE SOFT_DELAY
+OBJECT MODULE PLACED IN .\Objects\soft_delay.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\My_Libraries\Software Delay\soft_delay.c OPTIMIZE(8,SPEED) BROWSE 
+                    -INCDIR(..\..\Include;..\..\My_Libraries\Software Delay) DEFINE(FOSC_160000) DEBUG OBJECTEXTEND CODE PRINT(.\Listings\sof
+                    -t_delay.lst) TABS(2) PREPRINT(.\Listings\soft_delay.i) OBJECT(.\Objects\soft_delay.obj)
+
+line level    source
+
+   1          #include "N76E003.h"
+   2          #include "SFR_Macro.h"
+   3          #include "Function_define.h"
+   4          #include "Common.h"
+   5          #include "soft_delay.h"
+   6          
+   7          
+   8          void delay_us(unsigned int value)
+   9          {
+  10   1        value = (value / osc_scalar);
+  11   1        
+  12   1        while(value > 0)
+  13   1        {
+  14   2          nop;
+  15   2          value--;
+  16   2        }
+  17   1      }
+  18          
+  19          
+  20          void delay_ms(unsigned int value)
+  21          { 
+  22   1        while(value > 0)
+  23   1        {
+  24   2          --value;
+  25   2          delay_us(1000);
+  26   2        }
+  27   1      }
+C51 COMPILER V9.56.0.0   SOFT_DELAY                                                        07/25/2018 15:18:19 PAGE 2   
+
+ASSEMBLY LISTING OF GENERATED OBJECT CODE
+
+
+             ; FUNCTION _delay_us (BEGIN)
+                                           ; SOURCE LINE # 8
+;---- Variable 'value' assigned to Register 'R6/R7' ----
+                                           ; SOURCE LINE # 9
+                                           ; SOURCE LINE # 10
+0000         ?C0001:
+                                           ; SOURCE LINE # 12
+0000 D3                SETB    C
+0001 EF                MOV     A,R7
+0002 9400              SUBB    A,#00H
+0004 EE                MOV     A,R6
+0005 9400              SUBB    A,#00H
+0007 4008              JC      ?C0003
+                                           ; SOURCE LINE # 13
+                                           ; SOURCE LINE # 14
+0009 00                NOP     
+                                           ; SOURCE LINE # 15
+000A EF                MOV     A,R7
+000B 1F                DEC     R7
+000C 70F2              JNZ     ?C0001
+000E 1E                DEC     R6
+000F         ?C0007:
+                                           ; SOURCE LINE # 16
+000F 80EF              SJMP    ?C0001
+                                           ; SOURCE LINE # 17
+0011         ?C0003:
+0011 22                RET     
+             ; FUNCTION _delay_us (END)
+
+             ; FUNCTION _delay_ms (BEGIN)
+                                           ; SOURCE LINE # 20
+;---- Variable 'value' assigned to Register 'R4/R5' ----
+0000 AD07              MOV     R5,AR7
+0002 AC06              MOV     R4,AR6
+                                           ; SOURCE LINE # 21
+0004         ?C0004:
+                                           ; SOURCE LINE # 22
+0004 D3                SETB    C
+0005 ED                MOV     A,R5
+0006 9400              SUBB    A,#00H
+0008 EC                MOV     A,R4
+0009 9400              SUBB    A,#00H
+000B 400E              JC      ?C0006
+                                           ; SOURCE LINE # 23
+                                           ; SOURCE LINE # 24
+000D ED                MOV     A,R5
+000E 1D                DEC     R5
+000F 7001              JNZ     ?C0008
+0011 1C                DEC     R4
+0012         ?C0008:
+                                           ; SOURCE LINE # 25
+0012 7FE8              MOV     R7,#0E8H
+0014 7E03              MOV     R6,#03H
+0016 120000      R     LCALL   _delay_us
+                                           ; SOURCE LINE # 26
+0019 80E9              SJMP    ?C0004
+                                           ; SOURCE LINE # 27
+001B         ?C0006:
+001B 22                RET     
+C51 COMPILER V9.56.0.0   SOFT_DELAY                                                        07/25/2018 15:18:19 PAGE 3   
+
+             ; FUNCTION _delay_ms (END)
+
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     46    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

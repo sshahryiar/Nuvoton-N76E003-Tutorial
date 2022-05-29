@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+    <fileVersion>2</fileVersion>
+    <fileChecksum>3174321190</fileChecksum>
+    <configuration>
+        <name>Debug</name>
+        <outputs>
+            <file>$PROJ_DIR$\..\..\Common\Delay.c</file>
+            <file>$PROJ_DIR$\main.c</file>
+            <file>$PROJ_DIR$\..\..\My_Libraries\2 Wire LCD\PCF8574.c</file>
+            <file>$PROJ_DIR$\..\..\My_Libraries\2 Wire LCD\SW_I2C.c</file>
+            <file>$PROJ_DIR$\..\..\Common\Common.c</file>
+            <file>$PROJ_DIR$\..\..\My_Libraries\2 Wire LCD\LCD_2_Wire.c</file>
+            <file>$PROJ_DIR$\..\..\My_Libraries\2 Wire LCD\LCD_2_Wire.h</file>
+            <file>$PROJ_DIR$\..\..\Include\N76E003_iar.h</file>
+            <file>$TOOLKIT_DIR$\lib\clib\cl-pli-nsid-2h16inc.r51</file>
+            <file>$PROJ_DIR$\Debug\Obj\PCF8574.pbi</file>
+            <file>$PROJ_DIR$\..\..\My_Libraries\2 Wire LCD\SW_I2C.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\twi_lcd.pbd</file>
+            <file>$PROJ_DIR$\..\..\Include\Delay.h</file>
+            <file>$PROJ_DIR$\Debug\List\main.i</file>
+            <file>$PROJ_DIR$\Debug\Obj\PCF8574.r51</file>
+            <file>$PROJ_DIR$\Debug\List\twi_lcd.map</file>
+            <file>$PROJ_DIR$\Debug\Obj\SW_I2C.r51</file>
+            <file>$TOOLKIT_DIR$\inc\clib\stdio.h</file>
+            <file>$TOOLKIT_DIR$\inc\clib\sysmac.h</file>
+            <file>$PROJ_DIR$\Debug\Exe\twi_lcd.bin</file>
+            <file>$PROJ_DIR$\Debug\Obj\LCD_2_Wire.r51</file>
+            <file>$PROJ_DIR$\Debug\Obj\LCD_2_Wire.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\Common.r51</file>
+            <file>$PROJ_DIR$\..\..\Include\Function_define.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\main.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\main.r51</file>
+            <file>$PROJ_DIR$\..\..\Include\SFR_Macro.h</file>
+            <file>$PROJ_DIR$\..\..\Include\Common.h</file>
+            <file>$PROJ_DIR$\Debug\List\Common.i</file>
+            <file>$TOOLKIT_DIR$\inc\clib\stdarg.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\SW_I2C.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\Delay.r51</file>
+            <file>$PROJ_DIR$\Debug\Obj\Delay.pbi</file>
+            <file>$TOOLKIT_DIR$\config\devices\NuvoTon\lnk51ew_N76E003.xcl</file>
+            <file>$PROJ_DIR$\..\..\My_Libraries\2 Wire LCD\PCF8574.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\Common.pbi</file>
+            <file>$PROJ_DIR$\Debug\List\Delay.i</file>
+            <file>$PROJ_DIR$\Debug\List\PCF8574.i</file>
+            <file>$PROJ_DIR$\Debug\List\LCD_2_Wire.i</file>
+            <file>$PROJ_DIR$\Debug\Obj\Delay.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\main.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\Common.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\List\SW_I2C.i</file>
+        </outputs>
+        <file>
+            <name>[ROOT_NODE]</name>
+            <outputs>
+                <tool>
+                    <name>XLINK</name>
+                    <file> 19 15</file>
+                </tool>
+            </outputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\Common\Delay.c</name>
+            <outputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 32</file>
+                </tool>
+                <tool>
+                    <name>ICC8051</name>
+                    <file> 36 31</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 39</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 29 23 12 27 26 18 7 17</file>
+                </tool>
+                <tool>
+                    <name>ICC8051</name>
+                    <file> 7 27 12 26 23 17 29 18</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\main.c</name>
+            <outputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 24</file>
+                </tool>
+                <tool>
+                    <name>ICC8051</name>
+                    <file> 13 25</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 40</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 12 23 26 27 6 17 29 18 10 7 34</file>
+                </tool>
+                <tool>
+                    <name>ICC8051</name>
+                    <file> 7 26 23 17 29 18 27 12 6 34 10</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\My_Libraries\2 Wire LCD\PCF8574.c</name>
+            <outputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 9</file>
+                </tool>
+                <tool>
+                    <name>ICC8051</name>
+                    <file> 37 14</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 18 10 12 29 23 26 27 34 17 7</file>
+                </tool>
+                <tool>
+                    <name>ICC8051</name>
+                    <file> 7 26 23 17 29 18 27 12 34 10</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\My_Libraries\2 Wire LCD\SW_I2C.c</name>
+            <outputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 30</file>
+                </tool>
+                <tool>
+                    <name>ICC8051</name>
+                    <file> 42 16</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 18 12 17 23 26 27 10 29 7</file>
+                </tool>
+                <tool>
+                    <name>ICC8051</name>
+                    <file> 7 26 23 17 29 18 27 12 10</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\Common\Common.c</name>
+            <outputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 35</file>
+                </tool>
+                <tool>
+                    <name>ICC8051</name>
+                    <file> 28 22</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 41</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 29 23 12 18 27 26 17 7</file>
+                </tool>
+                <tool>
+                    <name>ICC8051</name>
+                    <file> 7 27 12 26 23 17 29 18</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\My_Libraries\2 Wire LCD\LCD_2_Wire.c</name>
+            <outputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 21</file>
+                </tool>
+                <tool>
+                    <name>ICC8051</name>
+                    <file> 38 20</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 10 12 34 23 29 18 26 27 6 17 7</file>
+                </tool>
+                <tool>
+                    <name>ICC8051</name>
+                    <file> 7 26 23 17 29 18 27 12 6 34 10</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\Debug\Exe\twi_lcd.bin</name>
+            <outputs>
+                <tool>
+                    <name>XLINK</name>
+                    <file> 15</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>XLINK</name>
+                    <file> 33 22 31 20 25 14 16 8</file>
+                </tool>
+            </inputs>
+        </file>
+    </configuration>
+    <configuration>
+        <name>Release</name>
+        <outputs />
+        <forcedrebuild>
+            <name>[MULTI_TOOL]</name>
+            <tool>XLINK</tool>
+        </forcedrebuild>
+    </configuration>
+</project>

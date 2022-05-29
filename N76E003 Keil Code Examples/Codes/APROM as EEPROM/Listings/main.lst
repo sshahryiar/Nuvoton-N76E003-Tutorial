@@ -1,0 +1,213 @@
+C51 COMPILER V9.56.0.0   MAIN                                                              07/25/2018 21:29:49 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\..\Include;..\..\My_Libraries\
+                    -3 Wire LCD (Software Delay);..\..\My_Libraries\Software Delay) DEFINE(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\Listings\m
+                    -ain.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "N76E003.h"
+   2          #include "Common.h"
+   3          #include "soft_delay.h"
+   4          #include "SFR_Macro.h"
+   5          #include "Function_define.h"
+   6          #include "LCD_3_Wire.h"
+   7          
+   8          
+   9          #define BASE_ADDRESS        3700
+  10          
+  11          
+  12          void write_data_byte(unsigned int address, unsigned char value);
+  13          unsigned char read_data_byte(unsigned int code *address);
+  14          void lcd_print_c(unsigned char x_pos, unsigned char y_pos, unsigned char value);
+  15          void lcd_print_i(unsigned char x_pos, unsigned char y_pos, unsigned int value);
+  16          
+  17          
+  18          void main (void) 
+  19          {
+  20   1        unsigned char s = 0;
+  21   1        unsigned char data_value = 0;
+  22   1        
+  23   1        P15_PushPull_Mode;
+  24   1        
+  25   1        LCD_init();
+  26   1        LCD_clear_home(); 
+  27   1        
+  28   1        clr_P15;  
+  29   1        LCD_goto(0, 0); 
+  30   1        LCD_putstr("R Addr:");
+  31   1        LCD_goto(0, 1); 
+  32   1        LCD_putstr("R Data:");
+  33   1        
+  34   1        for(s = 0; s <= 9; s++)
+  35   1        {
+  36   2          data_value = read_data_byte((s + BASE_ADDRESS));
+*** WARNING C214 IN LINE 36 OF main.c: 'Argument': conversion: non-pointer to pointer
+  37   2          delay_ms(10);
+  38   2          lcd_print_i(11, 0, (s + BASE_ADDRESS));
+  39   2          lcd_print_c(13, 1, data_value);
+  40   2          delay_ms(600);
+  41   2        }
+  42   1        
+  43   1        delay_ms(2000);
+  44   1        
+  45   1        set_P15;  
+  46   1        LCD_goto(0, 0); 
+  47   1        LCD_putstr("W Addr:");
+  48   1        LCD_goto(0, 1); 
+  49   1        LCD_putstr("W Data:");
+  50   1        
+  51   1        for(s = 0; s <= 9; s++)
+  52   1        {
+C51 COMPILER V9.56.0.0   MAIN                                                              07/25/2018 21:29:49 PAGE 2   
+
+  53   2          write_data_byte((s + BASE_ADDRESS), s);
+  54   2          delay_ms(10);
+  55   2          lcd_print_i(11, 0, (s + BASE_ADDRESS));
+  56   2          lcd_print_c(13, 1, s);
+  57   2          delay_ms(600);
+  58   2        }
+  59   1        
+  60   1        while(1)
+  61   1        {
+  62   2        };
+  63   1      }
+  64          
+  65          
+  66          void write_data_byte(unsigned int address, unsigned char value)
+  67          {
+  68   1        unsigned char looptmp = 0;
+  69   1        unsigned char u8_addrl_r = 0;
+  70   1        unsigned char code *cd_longaddr;
+  71   1        unsigned char xdata *xd_tmp;
+  72   1        
+  73   1      
+  74   1        u8_addrl_r = address;
+  75   1        
+  76   1        if(u8_addrl_r < 0x80)
+  77   1        {
+  78   2          u8_addrl_r = 0;
+  79   2        }
+  80   1        else 
+  81   1        {
+  82   2          u8_addrl_r = 0x80;
+  83   2        }
+  84   1      
+  85   1        xd_tmp = 0x280;
+  86   1        cd_longaddr = ((address & 0xff00) + u8_addrl_r);  
+  87   1        
+  88   1        while(xd_tmp !=0x300)
+  89   1        {
+  90   2          *xd_tmp = *cd_longaddr;
+  91   2          looptmp++;
+  92   2          xd_tmp++;
+  93   2          cd_longaddr++;
+  94   2        }
+  95   1      
+  96   1        u8_addrl_r = address;
+  97   1        
+  98   1        if (u8_addrl_r < 0x80)
+  99   1        {
+ 100   2          xd_tmp = (u8_addrl_r + 0x280);
+ 101   2        }
+ 102   1        else
+ 103   1        {
+ 104   2          xd_tmp = (u8_addrl_r + 0x200);
+ 105   2        }
+ 106   1        
+ 107   1        *xd_tmp = value;
+ 108   1      
+ 109   1        IAPAL = address;
+ 110   1        IAPAH = (address >> 8);
+ 111   1        IAPFD = 0xFF;
+ 112   1        set_IAPEN; 
+ 113   1        set_APUEN;
+ 114   1        IAPCN = 0x22;     
+C51 COMPILER V9.56.0.0   MAIN                                                              07/25/2018 21:29:49 PAGE 3   
+
+ 115   1        set_IAPGO; 
+ 116   1      
+ 117   1        u8_addrl_r = address;
+ 118   1        
+ 119   1        if (u8_addrl_r < 0x80)
+ 120   1        {
+ 121   2          u8_addrl_r = 0;
+ 122   2        }
+ 123   1        else
+ 124   1        {
+ 125   2          u8_addrl_r = 0x80;
+ 126   2        }
+ 127   1        
+ 128   1        xd_tmp = 0x280;
+ 129   1        IAPAL = u8_addrl_r;
+ 130   1        IAPAH = (address >> 8);
+ 131   1        set_IAPEN; 
+ 132   1        set_APUEN;
+ 133   1        IAPCN = 0x21;
+ 134   1        
+ 135   1        while(xd_tmp !=0x2FF)
+ 136   1        {
+ 137   2          IAPFD = *xd_tmp;
+ 138   2          set_IAPGO;
+ 139   2          IAPAL++;
+ 140   2          xd_tmp++;
+ 141   2        }
+ 142   1        
+ 143   1        clr_APUEN;
+ 144   1        clr_IAPEN;
+ 145   1      } 
+ 146          
+ 147          
+ 148          unsigned char read_data_byte(unsigned int code *address)
+ 149          {
+ 150   1        unsigned char value = 0;
+ 151   1        
+ 152   1        value = (*address >> 8);
+ 153   1        
+ 154   1        return value;
+ 155   1      }
+ 156          
+ 157          
+ 158          void lcd_print_c(unsigned char x_pos, unsigned char y_pos, unsigned char value)
+ 159          {  
+ 160   1        LCD_goto(x_pos, y_pos);
+ 161   1        LCD_putchar((value / 100) + 0x30);
+ 162   1        LCD_goto((x_pos + 1), y_pos);
+ 163   1        LCD_putchar(((value % 10) / 10) + 0x30);
+ 164   1        LCD_goto((x_pos + 2), y_pos);
+ 165   1        LCD_putchar((value % 10) + 0x30);
+ 166   1      }
+ 167          
+ 168          
+ 169          void lcd_print_i(unsigned char x_pos, unsigned char y_pos, unsigned int value)
+ 170          {  
+ 171   1        LCD_goto(x_pos, y_pos);
+ 172   1        LCD_putchar((value / 10000) + 0x30);
+ 173   1        LCD_goto((x_pos + 1), y_pos);
+ 174   1        LCD_putchar(((value % 10000) / 1000) + 0x30);  
+ 175   1        LCD_goto((x_pos + 2), y_pos);
+ 176   1        LCD_putchar(((value % 1000) / 100) + 0x30);
+C51 COMPILER V9.56.0.0   MAIN                                                              07/25/2018 21:29:49 PAGE 4   
+
+ 177   1        LCD_goto((x_pos + 3), y_pos);
+ 178   1        LCD_putchar(((value % 100) / 10) + 0x30);
+ 179   1        LCD_goto((x_pos + 4), y_pos);
+ 180   1        LCD_putchar((value % 10) + 0x30);
+ 181   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    793    ----
+   CONSTANT SIZE    =     32    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      15
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

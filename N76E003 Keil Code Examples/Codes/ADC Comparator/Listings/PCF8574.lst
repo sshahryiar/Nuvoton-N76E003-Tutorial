@@ -1,0 +1,63 @@
+C51 COMPILER V9.56.0.0   PCF8574                                                           07/25/2018 14:16:51 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE PCF8574
+OBJECT MODULE PLACED IN .\Objects\PCF8574.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\My_Libraries\2 Wire LCD  (Software Delay)\PCF8574.c OPTIMIZE(8,SPE
+                    -ED) BROWSE INCDIR(..\..\Include;..\..\My_Libraries\2 Wire LCD  (Software Delay);..\..\My_Libraries\Software Delay) DEFIN
+                    -E(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\Listings\PCF8574.lst) TABS(2) OBJECT(.\Objects\PCF8574.obj)
+
+line level    source
+
+   1          #include "N76E003.h"
+   2          #include "SFR_Macro.h"
+   3          #include "Function_define.h"
+   4          #include "Common.h"
+   5          #include "soft_delay.h"
+   6          #include "Delay.h"
+   7          #include "PCF8574.h"
+   8          
+   9          
+  10          void PCF8574_init(void)
+  11          {
+  12   1          SW_I2C_init();
+  13   1          delay_ms(10);
+  14   1      }
+  15          
+  16          
+  17          unsigned char PCF8574_read(void)
+  18          {
+  19   1          unsigned char port_byte = 0;
+  20   1      
+  21   1          SW_I2C_start();
+  22   1          SW_I2C_write(PCF8574_read_cmd);
+  23   1          port_byte = SW_I2C_read(I2C_NACK);
+  24   1          SW_I2C_stop();
+  25   1      
+  26   1          return port_byte;
+  27   1      }
+  28          
+  29          
+  30          void PCF8574_write(unsigned char data_byte)
+  31          {
+  32   1          SW_I2C_start();
+  33   1          SW_I2C_write(PCF8574_write_cmd);
+  34   1          SW_I2C_ACK_NACK(I2C_ACK);
+  35   1          SW_I2C_write(data_byte);
+  36   1          SW_I2C_ACK_NACK(I2C_ACK);
+  37   1          SW_I2C_stop();
+  38   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     62    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

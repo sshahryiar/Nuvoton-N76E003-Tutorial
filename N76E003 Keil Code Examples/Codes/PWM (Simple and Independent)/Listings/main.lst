@@ -1,0 +1,681 @@
+C51 COMPILER V9.56.0.0   MAIN                                                              07/25/2018 15:18:18 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\..\Include;..\..\My_Libraries\
+                    -Software Delay) DEFINE(FOSC_160000) DEBUG OBJECTEXTEND CODE PRINT(.\Listings\main.lst) TABS(2) PREPRINT(.\Listings\main.
+                    -i) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "N76E003.h"
+   2          #include "SFR_Macro.h"
+   3          #include "Function_define.h"
+   4          #include "Common.h"
+   5          #include "Delay.h"
+   6          #include "soft_delay.h"
+   7          
+   8          
+   9          unsigned int R_value[10] = {20, 150, 250, 360, 440, 560, 680, 820, 900, 1020};
+  10          unsigned int G_value[10] = {440, 560, 680, 820, 900, 1020, 20, 150, 250, 360};
+  11          unsigned int B_value[10] = {900, 1020, 20, 150, 250, 360, 440, 560, 680, 820};
+  12          
+  13          
+  14          void set_PWM_period(unsigned int value);
+  15          void set_PWM0(unsigned int value);
+  16          void set_PWM1(unsigned int value);
+  17          void set_PWM2(unsigned int value);
+  18          void set_PWM3(unsigned int value);
+  19          void set_PWM4(unsigned int value);
+  20          void set_PWM5(unsigned int value);
+  21          
+  22          
+  23          void main(void)
+  24          {
+  25   1        signed int i = 0;
+  26   1        signed char j = 0;
+  27   1      
+  28   1        P01_PushPull_Mode;
+  29   1        P10_PushPull_Mode;
+  30   1        P11_PushPull_Mode;
+  31   1      
+  32   1        PWM1_P11_OUTPUT_ENABLE;
+  33   1        PWM2_P10_OUTPUT_ENABLE;
+  34   1        PWM4_P01_OUTPUT_ENABLE;
+  35   1      
+  36   1        PWM_IMDEPENDENT_MODE;
+  37   1        PWM_EDGE_TYPE;
+  38   1        set_CLRPWM;
+  39   1        PWM_CLOCK_FSYS;
+  40   1        PWM_CLOCK_DIV_64;
+  41   1        PWM_OUTPUT_ALL_NORMAL;
+  42   1        set_PWM_period(1023);
+  43   1        set_PWMRUN;
+  44   1      
+  45   1        while(1)
+  46   1        {
+  47   2          for(i = 0; i < 1024; i += 10)
+  48   2          {
+  49   3            set_PWM1(i);
+  50   3            delay_ms(20);
+  51   3          }
+  52   2          for(i = 1023; i > 0; i -= 10)
+  53   2          {
+C51 COMPILER V9.56.0.0   MAIN                                                              07/25/2018 15:18:18 PAGE 2   
+
+  54   3            set_PWM1(i);
+  55   3            delay_ms(20);
+  56   3          }              
+  57   2          
+  58   2          for(i = 0; i < 1024; i += 10)
+  59   2          {
+  60   3            set_PWM2(i);
+  61   3            delay_ms(20);
+  62   3          }
+  63   2          for(i = 1023; i > 0; i -= 10)
+  64   2          {
+  65   3            set_PWM2(i);
+  66   3            delay_ms(20);
+  67   3          }
+  68   2          
+  69   2          for(i = 0; i < 1024; i += 10)
+  70   2          {
+  71   3            set_PWM4(i);
+  72   3            delay_ms(20);
+  73   3          }
+  74   2          for(i = 1023; i > 0; i -= 10)
+  75   2          {
+  76   3            set_PWM4(i);
+  77   3            delay_ms(20);
+  78   3          }
+  79   2          
+  80   2          delay_ms(600);
+  81   2          
+  82   2          for(i = 0; i <=9; i++)
+  83   2          {
+  84   3            for(j = 0; j <= 9; j++)
+  85   3            {
+  86   4              set_PWM4(R_value[j]);
+  87   4              set_PWM1(G_value[j]);
+  88   4              set_PWM2(B_value[j]);
+  89   4              delay_ms(200);
+  90   4            } 
+  91   3            for(j = 9; j >= 0; j--)
+  92   3            {
+  93   4              set_PWM4(R_value[j]);
+  94   4              set_PWM1(G_value[j]);
+  95   4              set_PWM2(B_value[j]);
+  96   4              delay_ms(200);
+  97   4            } 
+  98   3          }
+  99   2          
+ 100   2          delay_ms(600);
+ 101   2        }
+ 102   1      }
+ 103          
+ 104          
+ 105          void set_PWM_period(unsigned int value)
+ 106          {
+ 107   1        PWMPL = (value & 0x00FF);
+ 108   1        PWMPH = ((value & 0xFF00) >> 8);  
+ 109   1      }
+ 110          
+ 111          
+ 112          void set_PWM0(unsigned int value)
+ 113          {
+ 114   1        PWM0L = (value & 0x00FF);
+ 115   1        PWM0H = ((value & 0xFF00) >> 8);
+C51 COMPILER V9.56.0.0   MAIN                                                              07/25/2018 15:18:18 PAGE 3   
+
+ 116   1        set_LOAD;
+ 117   1        set_PWMRUN;
+ 118   1      }
+ 119          
+ 120          
+ 121          void set_PWM1(unsigned int value)
+ 122          {
+ 123   1        PWM1L = (value & 0x00FF);
+ 124   1        PWM1H = ((value & 0xFF00) >> 8);
+ 125   1        set_LOAD;
+ 126   1      }
+ 127          
+ 128          
+ 129          void set_PWM2(unsigned int value)
+ 130          {
+ 131   1        PWM2L = (value & 0x00FF);
+ 132   1        PWM2H = ((value & 0xFF00) >> 8);
+ 133   1        set_LOAD;
+ 134   1      }
+ 135          
+ 136          
+ 137          void set_PWM3(unsigned int value)
+ 138          {
+ 139   1        PWM3L = (value & 0x00FF);
+ 140   1        PWM3H = ((value & 0xFF00) >> 8);
+ 141   1        set_LOAD;
+ 142   1      }
+ 143          
+ 144          
+ 145          void set_PWM4(unsigned int value)
+ 146          {
+ 147   1        set_SFRPAGE;
+ 148   1        PWM4L = (value & 0x00FF);
+ 149   1        PWM4H = ((value & 0xFF00) >> 8);
+ 150   1        clr_SFRPAGE;
+ 151   1        set_LOAD;
+ 152   1      }
+ 153          
+ 154          
+ 155          void set_PWM5(unsigned int value)
+ 156          {
+ 157   1        set_SFRPAGE;
+ 158   1        PWM5L = (value & 0x00FF);
+ 159   1        PWM5H = ((value & 0xFF00) >> 8);
+ 160   1        clr_SFRPAGE;
+ 161   1        set_LOAD;
+ 162   1      }
+C51 COMPILER V9.56.0.0   MAIN                                                              07/25/2018 15:18:18 PAGE 4   
+
+ASSEMBLY LISTING OF GENERATED OBJECT CODE
+
+
+             ; FUNCTION main (BEGIN)
+                                           ; SOURCE LINE # 23
+                                           ; SOURCE LINE # 24
+                                           ; SOURCE LINE # 25
+0000 E4                CLR     A
+0001 F500        R     MOV     i,A
+0003 F500        R     MOV     i+01H,A
+                                           ; SOURCE LINE # 26
+0005 F500        R     MOV     j,A
+                                           ; SOURCE LINE # 28
+0007 53B1FD            ANL     P0M1,#0FDH
+000A 43B202            ORL     P0M2,#02H
+                                           ; SOURCE LINE # 29
+000D 53B3FE            ANL     P1M1,#0FEH
+0010 43B401            ORL     P1M2,#01H
+                                           ; SOURCE LINE # 30
+0013 53B3FD            ANL     P1M1,#0FDH
+0016 43B402            ORL     P1M2,#02H
+                                           ; SOURCE LINE # 32
+0019 43DE02            ORL     PIOCON0,#02H
+                                           ; SOURCE LINE # 33
+001C 43DE04            ORL     PIOCON0,#04H
+                                           ; SOURCE LINE # 34
+001F 43DE10            ORL     PIOCON0,#010H
+                                           ; SOURCE LINE # 36
+0022 53DF3F            ANL     PWMCON1,#03FH
+                                           ; SOURCE LINE # 37
+0025 53DFEF            ANL     PWMCON1,#0EFH
+                                           ; SOURCE LINE # 38
+0028 D2DC              SETB    CLRPWM
+                                           ; SOURCE LINE # 39
+002A 538EBF            ANL     CKCON,#0BFH
+                                           ; SOURCE LINE # 40
+002D 43DF06            ORL     PWMCON1,#06H
+0030 53DFFE            ANL     PWMCON1,#0FEH
+                                           ; SOURCE LINE # 41
+0033 F5D6              MOV     PNP,A
+                                           ; SOURCE LINE # 42
+0035 7FFF              MOV     R7,#0FFH
+0037 7E03              MOV     R6,#03H
+0039 120000      R     LCALL   _set_PWM_period
+                                           ; SOURCE LINE # 43
+003C D2DF              SETB    PWMRUN
+003E         ?C0001:
+                                           ; SOURCE LINE # 45
+                                           ; SOURCE LINE # 46
+                                           ; SOURCE LINE # 47
+003E E4                CLR     A
+003F F500        R     MOV     i,A
+0041 F500        R     MOV     i+01H,A
+0043         ?C0003:
+0043 C3                CLR     C
+0044 E500        R     MOV     A,i
+0046 6480              XRL     A,#080H
+0048 9484              SUBB    A,#084H
+004A 501B              JNC     ?C0004
+                                           ; SOURCE LINE # 48
+                                           ; SOURCE LINE # 49
+004C AF00        R     MOV     R7,i+01H
+C51 COMPILER V9.56.0.0   MAIN                                                              07/25/2018 15:18:18 PAGE 5   
+
+004E AE00        R     MOV     R6,i
+0050 120000      R     LCALL   _set_PWM1
+                                           ; SOURCE LINE # 50
+0053 7F14              MOV     R7,#014H
+0055 7E00              MOV     R6,#00H
+0057 120000      E     LCALL   _delay_ms
+                                           ; SOURCE LINE # 51
+005A 740A              MOV     A,#0AH
+005C 2500        R     ADD     A,i+01H
+005E F500        R     MOV     i+01H,A
+0060 E4                CLR     A
+0061 3500        R     ADDC    A,i
+0063 F500        R     MOV     i,A
+0065 80DC              SJMP    ?C0003
+0067         ?C0004:
+                                           ; SOURCE LINE # 52
+0067 750003      R     MOV     i,#03H
+006A 7500FF      R     MOV     i+01H,#0FFH
+006D         ?C0006:
+006D D3                SETB    C
+006E E500        R     MOV     A,i+01H
+0070 9400              SUBB    A,#00H
+0072 E500        R     MOV     A,i
+0074 6480              XRL     A,#080H
+0076 9480              SUBB    A,#080H
+0078 401C              JC      ?C0007
+                                           ; SOURCE LINE # 53
+                                           ; SOURCE LINE # 54
+007A AF00        R     MOV     R7,i+01H
+007C AE00        R     MOV     R6,i
+007E 120000      R     LCALL   _set_PWM1
+                                           ; SOURCE LINE # 55
+0081 7F14              MOV     R7,#014H
+0083 7E00              MOV     R6,#00H
+0085 120000      E     LCALL   _delay_ms
+                                           ; SOURCE LINE # 56
+0088 74F6              MOV     A,#0F6H
+008A 2500        R     ADD     A,i+01H
+008C F500        R     MOV     i+01H,A
+008E 74FF              MOV     A,#0FFH
+0090 3500        R     ADDC    A,i
+0092 F500        R     MOV     i,A
+0094 80D7              SJMP    ?C0006
+0096         ?C0007:
+                                           ; SOURCE LINE # 58
+0096 E4                CLR     A
+0097 F500        R     MOV     i,A
+0099 F500        R     MOV     i+01H,A
+009B         ?C0009:
+009B C3                CLR     C
+009C E500        R     MOV     A,i
+009E 6480              XRL     A,#080H
+00A0 9484              SUBB    A,#084H
+00A2 501B              JNC     ?C0010
+                                           ; SOURCE LINE # 59
+                                           ; SOURCE LINE # 60
+00A4 AF00        R     MOV     R7,i+01H
+00A6 AE00        R     MOV     R6,i
+00A8 120000      R     LCALL   _set_PWM2
+                                           ; SOURCE LINE # 61
+00AB 7F14              MOV     R7,#014H
+00AD 7E00              MOV     R6,#00H
+C51 COMPILER V9.56.0.0   MAIN                                                              07/25/2018 15:18:18 PAGE 6   
+
+00AF 120000      E     LCALL   _delay_ms
+                                           ; SOURCE LINE # 62
+00B2 740A              MOV     A,#0AH
+00B4 2500        R     ADD     A,i+01H
+00B6 F500        R     MOV     i+01H,A
+00B8 E4                CLR     A
+00B9 3500        R     ADDC    A,i
+00BB F500        R     MOV     i,A
+00BD 80DC              SJMP    ?C0009
+00BF         ?C0010:
+                                           ; SOURCE LINE # 63
+00BF 750003      R     MOV     i,#03H
+00C2 7500FF      R     MOV     i+01H,#0FFH
+00C5         ?C0012:
+00C5 D3                SETB    C
+00C6 E500        R     MOV     A,i+01H
+00C8 9400              SUBB    A,#00H
+00CA E500        R     MOV     A,i
+00CC 6480              XRL     A,#080H
+00CE 9480              SUBB    A,#080H
+00D0 401C              JC      ?C0013
+                                           ; SOURCE LINE # 64
+                                           ; SOURCE LINE # 65
+00D2 AF00        R     MOV     R7,i+01H
+00D4 AE00        R     MOV     R6,i
+00D6 120000      R     LCALL   _set_PWM2
+                                           ; SOURCE LINE # 66
+00D9 7F14              MOV     R7,#014H
+00DB 7E00              MOV     R6,#00H
+00DD 120000      E     LCALL   _delay_ms
+                                           ; SOURCE LINE # 67
+00E0 74F6              MOV     A,#0F6H
+00E2 2500        R     ADD     A,i+01H
+00E4 F500        R     MOV     i+01H,A
+00E6 74FF              MOV     A,#0FFH
+00E8 3500        R     ADDC    A,i
+00EA F500        R     MOV     i,A
+00EC 80D7              SJMP    ?C0012
+00EE         ?C0013:
+                                           ; SOURCE LINE # 69
+00EE E4                CLR     A
+00EF F500        R     MOV     i,A
+00F1 F500        R     MOV     i+01H,A
+00F3         ?C0015:
+00F3 C3                CLR     C
+00F4 E500        R     MOV     A,i
+00F6 6480              XRL     A,#080H
+00F8 9484              SUBB    A,#084H
+00FA 501B              JNC     ?C0016
+                                           ; SOURCE LINE # 70
+                                           ; SOURCE LINE # 71
+00FC AF00        R     MOV     R7,i+01H
+00FE AE00        R     MOV     R6,i
+0100 120000      R     LCALL   _set_PWM4
+                                           ; SOURCE LINE # 72
+0103 7F14              MOV     R7,#014H
+0105 7E00              MOV     R6,#00H
+0107 120000      E     LCALL   _delay_ms
+                                           ; SOURCE LINE # 73
+010A 740A              MOV     A,#0AH
+010C 2500        R     ADD     A,i+01H
+010E F500        R     MOV     i+01H,A
+C51 COMPILER V9.56.0.0   MAIN                                                              07/25/2018 15:18:18 PAGE 7   
+
+0110 E4                CLR     A
+0111 3500        R     ADDC    A,i
+0113 F500        R     MOV     i,A
+0115 80DC              SJMP    ?C0015
+0117         ?C0016:
+                                           ; SOURCE LINE # 74
+0117 750003      R     MOV     i,#03H
+011A 7500FF      R     MOV     i+01H,#0FFH
+011D         ?C0018:
+011D D3                SETB    C
+011E E500        R     MOV     A,i+01H
+0120 9400              SUBB    A,#00H
+0122 E500        R     MOV     A,i
+0124 6480              XRL     A,#080H
+0126 9480              SUBB    A,#080H
+0128 401C              JC      ?C0019
+                                           ; SOURCE LINE # 75
+                                           ; SOURCE LINE # 76
+012A AF00        R     MOV     R7,i+01H
+012C AE00        R     MOV     R6,i
+012E 120000      R     LCALL   _set_PWM4
+                                           ; SOURCE LINE # 77
+0131 7F14              MOV     R7,#014H
+0133 7E00              MOV     R6,#00H
+0135 120000      E     LCALL   _delay_ms
+                                           ; SOURCE LINE # 78
+0138 74F6              MOV     A,#0F6H
+013A 2500        R     ADD     A,i+01H
+013C F500        R     MOV     i+01H,A
+013E 74FF              MOV     A,#0FFH
+0140 3500        R     ADDC    A,i
+0142 F500        R     MOV     i,A
+0144 80D7              SJMP    ?C0018
+0146         ?C0019:
+                                           ; SOURCE LINE # 80
+0146 7F58              MOV     R7,#058H
+0148 7E02              MOV     R6,#02H
+014A 120000      E     LCALL   _delay_ms
+                                           ; SOURCE LINE # 82
+014D E4                CLR     A
+014E F500        R     MOV     i,A
+0150 F500        R     MOV     i+01H,A
+0152         ?C0021:
+                                           ; SOURCE LINE # 83
+                                           ; SOURCE LINE # 84
+0152 E4                CLR     A
+0153 F500        R     MOV     j,A
+0155         ?C0024:
+                                           ; SOURCE LINE # 85
+                                           ; SOURCE LINE # 86
+0155 120000      R     LCALL   L?0039
+                                           ; SOURCE LINE # 87
+0158 120000      R     LCALL   L?0040
+                                           ; SOURCE LINE # 88
+015B 120000      R     LCALL   L?0041
+                                           ; SOURCE LINE # 89
+015E 7FC8              MOV     R7,#0C8H
+0160 7E00              MOV     R6,#00H
+0162 120000      E     LCALL   _delay_ms
+                                           ; SOURCE LINE # 90
+0165 0500        R     INC     j
+0167 D3                SETB    C
+C51 COMPILER V9.56.0.0   MAIN                                                              07/25/2018 15:18:18 PAGE 8   
+
+0168 E500        R     MOV     A,j
+016A 6480              XRL     A,#080H
+016C 9489              SUBB    A,#089H
+016E 40E5              JC      ?C0024
+0170         ?C0025:
+                                           ; SOURCE LINE # 91
+0170 750009      R     MOV     j,#09H
+0173         ?C0027:
+                                           ; SOURCE LINE # 92
+                                           ; SOURCE LINE # 93
+0173 120000      R     LCALL   L?0039
+                                           ; SOURCE LINE # 94
+0176 120000      R     LCALL   L?0040
+                                           ; SOURCE LINE # 95
+0179 120000      R     LCALL   L?0041
+                                           ; SOURCE LINE # 96
+017C 7FC8              MOV     R7,#0C8H
+017E 7E00              MOV     R6,#00H
+0180 120000      E     LCALL   _delay_ms
+                                           ; SOURCE LINE # 97
+0183 1500        R     DEC     j
+0185 C3                CLR     C
+0186 E500        R     MOV     A,j
+0188 6480              XRL     A,#080H
+018A 9480              SUBB    A,#080H
+018C 50E5              JNC     ?C0027
+                                           ; SOURCE LINE # 98
+018E         ?C0023:
+018E 0500        R     INC     i+01H
+0190 E500        R     MOV     A,i+01H
+0192 7002              JNZ     ?C0038
+0194 0500        R     INC     i
+0196         ?C0038:
+0196 D3                SETB    C
+0197 9409              SUBB    A,#09H
+0199 E500        R     MOV     A,i
+019B 6480              XRL     A,#080H
+019D 9480              SUBB    A,#080H
+019F 40B1              JC      ?C0021
+01A1         ?C0022:
+                                           ; SOURCE LINE # 100
+01A1 7F58              MOV     R7,#058H
+01A3 7E02              MOV     R6,#02H
+01A5 120000      E     LCALL   _delay_ms
+                                           ; SOURCE LINE # 101
+01A8 020000      R     LJMP    ?C0001
+             ; FUNCTION main (END)
+
+             ; FUNCTION _set_PWM_period (BEGIN)
+                                           ; SOURCE LINE # 105
+;---- Variable 'value' assigned to Register 'R6/R7' ----
+                                           ; SOURCE LINE # 106
+                                           ; SOURCE LINE # 107
+0000 EF                MOV     A,R7
+0001 F5D9              MOV     PWMPL,A
+                                           ; SOURCE LINE # 108
+0003 EE                MOV     A,R6
+0004 F5D1              MOV     PWMPH,A
+                                           ; SOURCE LINE # 109
+0006 22                RET     
+             ; FUNCTION _set_PWM_period (END)
+
+C51 COMPILER V9.56.0.0   MAIN                                                              07/25/2018 15:18:18 PAGE 9   
+
+             ; FUNCTION _set_PWM0 (BEGIN)
+                                           ; SOURCE LINE # 112
+;---- Variable 'value' assigned to Register 'R6/R7' ----
+                                           ; SOURCE LINE # 113
+                                           ; SOURCE LINE # 114
+0000 EF                MOV     A,R7
+0001 F5DA              MOV     PWM0L,A
+                                           ; SOURCE LINE # 115
+0003 EE                MOV     A,R6
+0004 F5D2              MOV     PWM0H,A
+                                           ; SOURCE LINE # 116
+0006 D2DE              SETB    LOAD
+                                           ; SOURCE LINE # 117
+0008 D2DF              SETB    PWMRUN
+                                           ; SOURCE LINE # 118
+000A 22                RET     
+             ; FUNCTION _set_PWM0 (END)
+
+             ; FUNCTION L?0040 (BEGIN)
+0000 E500        R     MOV     A,j
+0002 25E0              ADD     A,ACC
+0004 2400        R     ADD     A,#LOW G_value
+0006 F8                MOV     R0,A
+0007 E6                MOV     A,@R0
+0008 FE                MOV     R6,A
+0009 08                INC     R0
+000A E6                MOV     A,@R0
+000B FF                MOV     R7,A
+             ; FUNCTION _set_PWM1 (BEGIN)
+                                           ; SOURCE LINE # 121
+;---- Variable 'value' assigned to Register 'R6/R7' ----
+                                           ; SOURCE LINE # 122
+                                           ; SOURCE LINE # 123
+000C EF                MOV     A,R7
+000D F5DB              MOV     PWM1L,A
+                                           ; SOURCE LINE # 124
+000F EE                MOV     A,R6
+0010 F5D3              MOV     PWM1H,A
+                                           ; SOURCE LINE # 125
+0012 D2DE              SETB    LOAD
+                                           ; SOURCE LINE # 126
+0014 22                RET     
+             ; FUNCTION _set_PWM1 (END)
+
+             ; FUNCTION L?0041 (BEGIN)
+0000 E500        R     MOV     A,j
+0002 25E0              ADD     A,ACC
+0004 2400        R     ADD     A,#LOW B_value
+0006 F8                MOV     R0,A
+0007 E6                MOV     A,@R0
+0008 FE                MOV     R6,A
+0009 08                INC     R0
+000A E6                MOV     A,@R0
+000B FF                MOV     R7,A
+             ; FUNCTION _set_PWM2 (BEGIN)
+                                           ; SOURCE LINE # 129
+;---- Variable 'value' assigned to Register 'R6/R7' ----
+                                           ; SOURCE LINE # 130
+                                           ; SOURCE LINE # 131
+000C EF                MOV     A,R7
+000D F5DC              MOV     PWM2L,A
+                                           ; SOURCE LINE # 132
+C51 COMPILER V9.56.0.0   MAIN                                                              07/25/2018 15:18:18 PAGE 10  
+
+000F EE                MOV     A,R6
+0010 F5D4              MOV     PWM2H,A
+                                           ; SOURCE LINE # 133
+0012 D2DE              SETB    LOAD
+                                           ; SOURCE LINE # 134
+0014 22                RET     
+             ; FUNCTION _set_PWM2 (END)
+
+             ; FUNCTION _set_PWM3 (BEGIN)
+                                           ; SOURCE LINE # 137
+;---- Variable 'value' assigned to Register 'R6/R7' ----
+                                           ; SOURCE LINE # 138
+                                           ; SOURCE LINE # 139
+0000 EF                MOV     A,R7
+0001 F5DD              MOV     PWM3L,A
+                                           ; SOURCE LINE # 140
+0003 EE                MOV     A,R6
+0004 F5D5              MOV     PWM3H,A
+                                           ; SOURCE LINE # 141
+0006 D2DE              SETB    LOAD
+                                           ; SOURCE LINE # 142
+0008 22                RET     
+             ; FUNCTION _set_PWM3 (END)
+
+             ; FUNCTION L?0039 (BEGIN)
+0000 E500        R     MOV     A,j
+0002 25E0              ADD     A,ACC
+0004 2400        R     ADD     A,#LOW R_value
+0006 F8                MOV     R0,A
+0007 E6                MOV     A,@R0
+0008 FE                MOV     R6,A
+0009 08                INC     R0
+000A E6                MOV     A,@R0
+000B FF                MOV     R7,A
+             ; FUNCTION _set_PWM4 (BEGIN)
+                                           ; SOURCE LINE # 145
+;---- Variable 'value' assigned to Register 'R6/R7' ----
+                                           ; SOURCE LINE # 146
+                                           ; SOURCE LINE # 147
+000C A2AF              MOV     C,EA
+000E 9200        E     MOV     BIT_TMP,C
+0010 C2AF              CLR     EA
+0012 75C7AA            MOV     TA,#0AAH
+0015 75C755            MOV     TA,#055H
+0018 439101            ORL     SFRS,#01H
+001B A200        E     MOV     C,BIT_TMP
+001D 92AF              MOV     EA,C
+                                           ; SOURCE LINE # 148
+001F EF                MOV     A,R7
+0020 F5CC              MOV     PWM4L,A
+                                           ; SOURCE LINE # 149
+0022 EE                MOV     A,R6
+0023 F5C4              MOV     PWM4H,A
+                                           ; SOURCE LINE # 150
+0025 A2AF              MOV     C,EA
+0027 9200        E     MOV     BIT_TMP,C
+0029 C2AF              CLR     EA
+002B 75C7AA            MOV     TA,#0AAH
+002E 75C755            MOV     TA,#055H
+0031 5391FE            ANL     SFRS,#0FEH
+0034 A200        E     MOV     C,BIT_TMP
+0036 92AF              MOV     EA,C
+C51 COMPILER V9.56.0.0   MAIN                                                              07/25/2018 15:18:18 PAGE 11  
+
+                                           ; SOURCE LINE # 151
+0038 D2DE              SETB    LOAD
+                                           ; SOURCE LINE # 152
+003A 22                RET     
+             ; FUNCTION _set_PWM4 (END)
+
+             ; FUNCTION _set_PWM5 (BEGIN)
+                                           ; SOURCE LINE # 155
+;---- Variable 'value' assigned to Register 'R6/R7' ----
+                                           ; SOURCE LINE # 156
+                                           ; SOURCE LINE # 157
+0000 A2AF              MOV     C,EA
+0002 9200        E     MOV     BIT_TMP,C
+0004 C2AF              CLR     EA
+0006 75C7AA            MOV     TA,#0AAH
+0009 75C755            MOV     TA,#055H
+000C 439101            ORL     SFRS,#01H
+000F A200        E     MOV     C,BIT_TMP
+0011 92AF              MOV     EA,C
+                                           ; SOURCE LINE # 158
+0013 EF                MOV     A,R7
+0014 F5CD              MOV     PWM5L,A
+                                           ; SOURCE LINE # 159
+0016 EE                MOV     A,R6
+0017 F5C5              MOV     PWM5H,A
+                                           ; SOURCE LINE # 160
+0019 A2AF              MOV     C,EA
+001B 9200        E     MOV     BIT_TMP,C
+001D C2AF              CLR     EA
+001F 75C7AA            MOV     TA,#0AAH
+0022 75C755            MOV     TA,#055H
+0025 5391FE            ANL     SFRS,#0FEH
+0028 A200        E     MOV     C,BIT_TMP
+002A 92AF              MOV     EA,C
+                                           ; SOURCE LINE # 161
+002C D2DE              SETB    LOAD
+                                           ; SOURCE LINE # 162
+002E 22                RET     
+             ; FUNCTION _set_PWM5 (END)
+
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    602    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     60       3
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

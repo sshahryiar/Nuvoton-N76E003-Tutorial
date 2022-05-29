@@ -1,0 +1,10 @@
+".\Objects\main.obj",
+".\Objects\Common.obj",
+".\Objects\Delay.obj",
+".\Objects\soft_delay.obj",
+".\Objects\MAX72xx.obj",
+".\Objects\MAX6675.obj",
+".\Objects\STARTUP.obj" 
+TO ".\Objects\spi" 
+PRINT(".\Listings\spi.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 

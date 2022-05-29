@@ -1,0 +1,1 @@
+"..\..\Common\Delay.c" OPTIMIZE (8,SPEED) BROWSE INCDIR(..\..\Include) DEFINE (FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\Listings\Delay.lst) TABS (2) OBJECT(.\Objects\Delay.obj)

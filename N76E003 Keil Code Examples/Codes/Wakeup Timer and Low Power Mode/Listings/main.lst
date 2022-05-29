@@ -1,0 +1,74 @@
+C51 COMPILER V9.56.0.0   MAIN                                                              07/25/2018 14:34:35 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\..\Include;..\..\My_Libraries\
+                    -Software Delay) DEFINE(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\Listings\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "N76E003.h"
+   2          #include "Common.h"
+   3          #include "Delay.h"
+   4          #include "SFR_Macro.h"
+   5          #include "Function_define.h"
+   6          #include "soft_delay.h"
+   7          
+   8          
+   9          void WKT_ISR(void)
+  10          interrupt 17
+  11          {
+  12   1        clr_WKTR;
+  13   1        clr_WKTF;                                 
+  14   1      }
+  15          
+  16          
+  17          void main(void)
+  18          {
+  19   1        unsigned char s = 0; 
+  20   1        
+  21   1        P15_PushPull_Mode;
+  22   1      
+  23   1        WKCON = 0x03;                       
+  24   1        RWK = 0X00;
+  25   1        set_EWKT;                       
+  26   1        set_EA;
+  27   1        
+  28   1        while(1)
+  29   1        {
+  30   2          for(s = 0; s < 9; s++)
+  31   2          {
+  32   3            P15 = ~P15;
+  33   3            delay_ms(100);
+  34   3          }
+  35   2          
+  36   2          set_WKTR;                           
+  37   2          set_PD;
+  38   2          
+  39   2          for(s = 0; s <= 9; s++)
+  40   2          {
+  41   3            P15 = ~P15;
+  42   3            delay_ms(300);
+  43   3          }
+  44   2          
+  45   2          set_WKTR;                           
+  46   2          set_PD;
+  47   2        };
+  48   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     82    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+C51 COMPILER V9.56.0.0   MAIN                                                              07/25/2018 14:34:35 PAGE 2   
+
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

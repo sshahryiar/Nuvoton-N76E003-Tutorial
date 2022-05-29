@@ -1,0 +1,165 @@
+C51 COMPILER V9.56.0.0   LCD_2_WIRE                                                        07/25/2018 14:16:50 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE LCD_2_WIRE
+OBJECT MODULE PLACED IN .\Objects\LCD_2_Wire.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\My_Libraries\2 Wire LCD  (Software Delay)\LCD_2_Wire.c OPTIMIZE(8,
+                    -SPEED) BROWSE INCDIR(..\..\Include;..\..\My_Libraries\2 Wire LCD  (Software Delay);..\..\My_Libraries\Software Delay) DE
+                    -FINE(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\Listings\LCD_2_Wire.lst) TABS(2) OBJECT(.\Objects\LCD_2_Wire.obj)
+
+line level    source
+
+   1          #include "N76E003.h"
+   2          #include "SFR_Macro.h"
+   3          #include "Function_define.h"
+   4          #include "Common.h"
+   5          #include "Delay.h"
+   6          #include "soft_delay.h"
+   7          #include "LCD_2_Wire.h"
+   8          
+   9          
+  10          static unsigned char bl_state;
+  11          static unsigned char data_value;
+  12          
+  13          
+  14          void LCD_init(void)
+  15          {                       
+  16   1        PCF8574_init();
+  17   1        delay_ms(10);
+  18   1      
+  19   1        bl_state = BL_ON;
+  20   1        data_value = 0x04;
+  21   1        PCF8574_write(data_value);
+  22   1      
+  23   1        delay_ms(10);
+  24   1      
+  25   1        LCD_send(0x33, CMD);
+  26   1        LCD_send(0x32, CMD);
+  27   1      
+  28   1        LCD_send((_4_pin_interface | _2_row_display | _5x7_dots), CMD);         
+  29   1        LCD_send((display_on | cursor_off | blink_off), CMD);     
+  30   1        LCD_send((clear_display), CMD);         
+  31   1        LCD_send((cursor_direction_inc | display_no_shift), CMD);        
+  32   1      }   
+  33          
+  34          
+  35          void LCD_toggle_EN(void)
+  36          {
+  37   1        data_value |= 0x04;
+  38   1        PCF8574_write(data_value);
+  39   1        delay_ms(1);
+  40   1        data_value &= 0xF9;
+  41   1        PCF8574_write(data_value);
+  42   1        delay_ms(1);
+  43   1      }
+  44             
+  45          
+  46          void LCD_send(unsigned char value, unsigned char mode)
+  47          {
+  48   1        switch(mode)
+  49   1        {
+  50   2           case CMD:
+  51   2           {
+  52   3              data_value &= 0xF4;
+  53   3              break;
+C51 COMPILER V9.56.0.0   LCD_2_WIRE                                                        07/25/2018 14:16:50 PAGE 2   
+
+  54   3           }
+  55   2           case DAT:
+  56   2           {
+  57   3              data_value |= 0x01;
+  58   3              break;
+  59   3           }
+  60   2        }
+  61   1      
+  62   1        switch(bl_state)
+  63   1        {
+  64   2           case BL_ON:
+  65   2           {
+  66   3              data_value |= 0x08;
+  67   3              break;
+  68   3           }
+  69   2           case BL_OFF:
+  70   2           {
+  71   3              data_value &= 0xF7;
+  72   3              break;
+  73   3           }
+  74   2        }
+  75   1      
+  76   1        PCF8574_write(data_value);
+  77   1        LCD_4bit_send(value);
+  78   1        delay_ms(1);
+  79   1      }
+  80              
+  81          
+  82          void LCD_4bit_send(unsigned char lcd_data)       
+  83          {
+  84   1        unsigned char temp = 0x00;
+  85   1      
+  86   1        temp = (lcd_data & 0xF0);
+  87   1        data_value &= 0x0F;
+  88   1        data_value |= temp;
+  89   1        PCF8574_write(data_value);
+  90   1        LCD_toggle_EN();
+  91   1      
+  92   1        temp = (lcd_data & 0x0F);
+  93   1        temp <<= 0x04;
+  94   1        data_value &= 0x0F;
+  95   1        data_value |= temp;
+  96   1        PCF8574_write(data_value);
+  97   1        LCD_toggle_EN();
+  98   1      }  
+  99          
+ 100          
+ 101          void LCD_putstr(char *lcd_string)
+ 102          {
+ 103   1        do
+ 104   1        {
+ 105   2          LCD_putchar(*lcd_string++);
+ 106   2        }while(*lcd_string != '\0') ;
+ 107   1      }
+ 108          
+ 109          
+ 110          void LCD_putchar(char char_data)
+ 111          {
+ 112   1        if((char_data >= 0x20) && (char_data <= 0x7F))
+ 113   1        {
+ 114   2          LCD_send(char_data, DAT);
+ 115   2        }
+C51 COMPILER V9.56.0.0   LCD_2_WIRE                                                        07/25/2018 14:16:50 PAGE 3   
+
+ 116   1      }
+ 117          
+ 118          
+ 119          void LCD_clear_home(void)
+ 120          {
+ 121   1        LCD_send(clear_display, CMD);
+ 122   1        LCD_send(goto_home, CMD);
+ 123   1      }
+ 124          
+ 125          
+ 126          void LCD_goto(unsigned char x_pos,unsigned char y_pos)
+ 127          {                                                   
+ 128   1        if(y_pos == 0)    
+ 129   1        {                              
+ 130   2          LCD_send((0x80 | x_pos), CMD);
+ 131   2        }
+ 132   1        else 
+ 133   1        {                                              
+ 134   2          LCD_send((0x80 | 0x40 | x_pos), CMD); 
+ 135   2        }
+ 136   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    285    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2       6
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

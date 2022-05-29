@@ -1,0 +1,1 @@
+"..\..\My_Libraries\2 Wire LCD  (Software Delay)\SW_I2C.c" OPTIMIZE (8,SPEED) BROWSE INCDIR(..\..\Include;..\..\My_Libraries\2 Wire LCD  (Software Delay);..\..\My_Libraries\Software Delay) DEFINE (FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\Listings\SW_I2C.lst) TABS (2) OBJECT(.\Objects\SW_I2C.obj)

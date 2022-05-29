@@ -1,0 +1,137 @@
+C51 COMPILER V9.56.0.0   MAIN                                                              07/25/2018 14:16:49 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\..\Include;..\..\My_Libraries\
+                    -2 Wire LCD  (Software Delay);..\..\My_Libraries\Software Delay) DEFINE(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\Listings\
+                    -main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "N76E003.h"
+   2          #include "SFR_Macro.h"
+   3          #include "Function_define.h"
+   4          #include "Common.h"
+   5          #include "Delay.h"
+   6          #include "soft_delay.h"
+   7          #include "LCD_2_Wire.h"
+   8          
+   9          
+  10          unsigned int adc_value = 0x0000;
+  11          
+  12          
+  13          void setup(void);
+  14          unsigned int ADC_read(void);
+  15          void set_ADC_comparator_value(unsigned int value);
+  16          void lcd_print_i(unsigned char x_pos, unsigned char y_pos, unsigned int value);
+  17          
+  18          
+  19          
+  20          void ADC_ISR(void)
+  21          interrupt 11  
+  22          {
+  23   1        adc_value = ADC_read();
+  24   1        clr_ADCF;
+  25   1      }
+  26          
+  27          
+  28          void main(void)
+  29          {
+  30   1        setup();
+  31   1        
+  32   1        while(1)
+  33   1        {
+  34   2          set_ADCS;
+  35   2          lcd_print_i(12, 0, adc_value);
+  36   2          
+  37   2          LCD_goto(12, 1);
+  38   2          
+  39   2          if((ADCCON2 & 0x10) != 0x00)
+  40   2          {
+  41   3            LCD_putstr("HIGH");
+  42   3            set_P15; 
+  43   3          }
+  44   2          else
+  45   2          {
+  46   3            LCD_putstr(" LOW");
+  47   3            clr_P15;
+  48   3          }
+  49   2          
+  50   2          delay_ms(400);
+  51   2        }
+  52   1      }
+  53          
+C51 COMPILER V9.56.0.0   MAIN                                                              07/25/2018 14:16:49 PAGE 2   
+
+  54          
+  55          void setup(void)
+  56          { 
+  57   1        P15_PushPull_Mode;
+  58   1        
+  59   1        LCD_init();
+  60   1        LCD_clear_home(); 
+  61   1        LCD_goto(0, 0); 
+  62   1        LCD_putstr("ADC Count:");
+  63   1        LCD_goto(0, 1); 
+  64   1        LCD_putstr("Cmp State:");
+  65   1        
+  66   1        Enable_ADC_BandGap;
+  67   1        Enable_ADC_AIN4;
+  68   1        
+  69   1        set_ADC_comparator_value(1023);  
+  70   1        set_ADCMPEN;
+  71   1        
+  72   1        set_EADC;
+  73   1        set_EA;
+  74   1      }
+  75          
+  76          
+  77          unsigned int ADC_read(void)
+  78          {
+  79   1        register unsigned int value = 0x0000; 
+  80   1        
+  81   1        value = ADCRH;
+  82   1        value <<= 4;
+  83   1        value |= ADCRL;
+  84   1        
+  85   1        return value;
+  86   1      }
+  87          
+  88          
+  89          void set_ADC_comparator_value(unsigned int value)
+  90          {
+  91   1        ADCMPH = ((value & 0x0FF0) >> 4);
+  92   1        ADCMPL = (value & 0x000F);
+  93   1      }
+  94          
+  95          
+  96          void lcd_print_i(unsigned char x_pos, unsigned char y_pos, unsigned int value)
+  97          {  
+  98   1        LCD_goto(x_pos, y_pos);
+  99   1        LCD_putchar((value / 1000) + 0x30);
+ 100   1        LCD_goto((x_pos + 1), y_pos);
+ 101   1        LCD_putchar(((value % 1000) / 100) + 0x30);  
+ 102   1        LCD_goto((x_pos + 2), y_pos);
+ 103   1        LCD_putchar(((value % 100) / 10) + 0x30);
+ 104   1        LCD_goto((x_pos + 3), y_pos);
+ 105   1        LCD_putchar((value % 10) + 0x30);
+ 106   1      }
+ 107          
+ 108          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    405    ----
+   CONSTANT SIZE    =     32    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+C51 COMPILER V9.56.0.0   MAIN                                                              07/25/2018 14:16:49 PAGE 3   
+
+   DATA SIZE        =      2       4
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
